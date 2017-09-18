@@ -13,9 +13,6 @@ class Event(models.Model):
 
     sensors = models.ManyToManyField(Sensor)
 
-    class Meta:
-        abstract = True
-
 class ActiveEvent(Event):
     type = models.CharField(max_length=50, default="active")
     # pensar uma melhor forma de resolver essa situacao (import de classe abstrata)

@@ -13,7 +13,6 @@ class Person(models.Model):
     class Meta:
         verbose_name = 'Pessoa'
         verbose_name_plural = 'Pessoas'
-        abstract = True
 
     def __unicode__(self):
         return u'%s' % self.name
@@ -23,7 +22,7 @@ class Observer(Person):
 
 class Participant(Person):
 
-    observer = models.ForeignKey(Observer, related_name="contacts", on_delete=models.CASCADE, default=1)
+    observerResponsible = models.ForeignKey(Observer, related_name="contacts", on_delete=models.CASCADE, default=1)
 
     def __unicode__(self):
         return u'%s' % self.name

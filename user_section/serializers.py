@@ -39,7 +39,7 @@ class ParticipantSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Participant
-        fields = ('id', 'name', 'email', 'observer')
+        fields = ('id', 'name', 'email', 'observerResponsible')
     # id = serializers.IntegerField(read_only=True)
     # name = serializers.CharField(max_length=200)
     # email = serializers.EmailField(required=True)

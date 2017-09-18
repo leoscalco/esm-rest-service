@@ -24,6 +24,13 @@ class ARRAY_OptionSerialzer(serializers.ModelSerializer):
         model = ARRAY_option
         fields = ('id', 'option')
 
+class InterventionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Intervention
+        fields = ('id', 'statement','medias',
+            'orderPosition', 'first', 'next', 'obligatory'
+        )
+
 class EmptyInterventionSerializer(serializers.ModelSerializer):
     medias = MediaPresentationSerializer(many=True)
 

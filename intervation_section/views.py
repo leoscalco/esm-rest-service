@@ -6,8 +6,15 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from rest_framework import viewsets
-from intervation_section.serializers import EmptyInterventionSerializer, TaskInterventionSerializer, MediaInterventionSerializer, QuestionInterventionSerializer
-from intervation_section.models import EmptyIntervention, TaskIntervention, MediaIntervention, QuestionIntervention
+from intervation_section.serializers import EmptyInterventionSerializer, TaskInterventionSerializer, MediaInterventionSerializer, QuestionInterventionSerializer, InterventionSerializer
+from intervation_section.models import EmptyIntervention, TaskIntervention, MediaIntervention, QuestionIntervention, Intervention
+
+class InterventionList(APIView):
+
+    def get(self, request, format=None):
+        interventions = Intervention.objects.all()
+        serializer = InterventionSerializer(interventions, many=True)
+        return Response(serializer.data)
 
 class EmptyInterventionList(APIView):
     """

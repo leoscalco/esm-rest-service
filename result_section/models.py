@@ -13,9 +13,6 @@ class Result(models.Model):
 
     participant = models.ForeignKey(Participant)
 
-    class Meta:
-        abstract = True
-
 class MediaResult(Result):
     media = models.ForeignKey(MediaIntervention, null=True, blank=True)
     type = models.CharField(max_length=50, default="media")

@@ -37,9 +37,6 @@ class Intervention(models.Model):
     next = models.IntegerField()
     obligatory = models.BooleanField(default=False)
 
-    class Meta:
-        abstract = True
-
 class EmptyIntervention(Intervention):
     type = models.CharField(max_length=10, default="empty")
 
