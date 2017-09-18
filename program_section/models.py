@@ -9,9 +9,9 @@ class Program(models.Model):
     description = models.CharField(max_length=300)
     starts = models.CharField(max_length=50)
     ends = models.CharField(max_length=50)
-    update_date = models.CharField(max_length=50)
+    updateDate = models.CharField(max_length=50)
 
     participants = models.ManyToManyField(Participant)
     observers = models.ManyToManyField(Observer)
-    active_events = models.ManyToManyField(ActiveEvent)
-    passive_events = models.ManyToManyField(PassiveEvent)
+    activeEvents = models.ManyToManyField(ActiveEvent)
+    passiveEvents = models.ManyToManyField(PassiveEvent)

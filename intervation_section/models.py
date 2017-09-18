@@ -21,7 +21,7 @@ class MediaPresentation(models.Model):
         default = IMAGEM
     )
 
-    media_url = models.URLField()
+    mediaUrl = models.URLField()
 
 class ComplexCondition(models.Model):
     value = models.CharField(max_length=50)
@@ -32,7 +32,7 @@ class ComplexCondition(models.Model):
 class Intervention(models.Model):
     statement = models.CharField(max_length=100)
     medias = models.ManyToManyField(MediaPresentation)
-    order_position = models.IntegerField()
+    orderPosition = models.IntegerField()
     first = models.BooleanField(default=False)
     next = models.IntegerField()
     obligatory = models.BooleanField(default=False)
@@ -56,7 +56,7 @@ class MediaIntervention(Intervention):
     )
 
     type = models.CharField(max_length=10, default="media")
-    media_type = models.CharField(
+    mediaType = models.CharField(
         max_length = 1,
         choices = TYPE,
         default = IMAGEM
@@ -79,7 +79,7 @@ class QuestionIntervention(Intervention):
     )
 
     type = models.CharField(max_length=10, default="question")
-    question_type = models.IntegerField(
+    questionType = models.IntegerField(
         choices=QUESTION_TYPE,
         default=0
     )
@@ -100,4 +100,4 @@ class ARRAY_option(models.Model):
 
 class TaskIntervention(Intervention):
     type = models.CharField(max_length=10, default="task")
-    app_package = models.CharField(max_length=50)
+    appPackage = models.CharField(max_length=50)

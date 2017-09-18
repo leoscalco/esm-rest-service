@@ -7,9 +7,8 @@ class SensorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Sensor
         # fields = ('id', 'sensor_type', 'sensor')
-        fields = ('id', 'sensor_type', 'sensor', 'SENSOR_TYPE_INTERVAL',
-            'SENSOR_TYPE_TASK', 'SENSOR_ACTIVITY', 'SENSOR_ACCELEROMETER',
-            'SENSOR_CAMERA', 'SENSOR_LIGHT', 'SENSOR_MICROPHONE'
+        fields = ('id', 'sensorType', 'sensor', 'SENSOR_TYPE_INTERVAL',
+            'SENSOR_TYPE_TASK'
             )
 
     # id = serializers.IntegerField(read_only=True)

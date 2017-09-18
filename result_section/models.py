@@ -19,7 +19,7 @@ class Result(models.Model):
 class MediaResult(Result):
     media = models.ForeignKey(MediaIntervention, null=True, blank=True)
     type = models.CharField(max_length=50, default="media")
-    url_for_data_file = models.URLField(blank=True)
+    urlForDataFile = models.URLField(blank=True)
 
 class QuestionResult(Result):
     question = models.ForeignKey(QuestionIntervention)
@@ -29,10 +29,10 @@ class QuestionResult(Result):
 class SensorResult(Result):
     sensor = models.ForeignKey(Sensor)
     type = models.CharField(max_length=50, default="sensor")
-    url_for_data_file = models.URLField()
+    urlForDataFile = models.URLField()
 
 class TaskResult(Result):
     task = models.ForeignKey(TaskIntervention)
     type = models.CharField(max_length=50, default="task")
-    url_for_data_file = models.URLField()
+    urlForDataFile = models.URLField()
 

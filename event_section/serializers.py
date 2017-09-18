@@ -16,29 +16,29 @@ class ActiveEventWriteSerializer(serializers.ModelSerializer):
     class Meta:
         model = ActiveEvent
         fields = ('id', 'type', 'title' , 'description',
-           'media_results', 'task_results', 'question_results', 'sensor_results',
+           'mediaResults', 'taskResults', 'questionResults', 'sensorResults',
            'triggers', 'sensors',
-           'empty_interventions', 'task_interventions', 'question_interventions', 'media_interventions' )
+           'emptyInterventions', 'taskInterventions', 'questionInterventions', 'mediaInterventions' )
 
 class ActiveEventReadSerializer(serializers.ModelSerializer):
     # just id without, dict with
-    media_results = MediaResultReadSerializer(many=True)
-    task_results = TaskResultReadSerializer(many=True)
-    question_results = QuestionResultReadSerializer(many=True)
-    sensor_results = SensorResultReadSerializer(many=True)
+    mediaResults = MediaResultReadSerializer(many=True)
+    taskResults = TaskResultReadSerializer(many=True)
+    questionResults = QuestionResultReadSerializer(many=True)
+    sensorResults = SensorResultReadSerializer(many=True)
 
     triggers = EventTriggerSerializer(many=True);
     sensors = SensorSerializer(many=True)
 
-    empty_interventions = EmptyInterventionSerializer(many=True)
-    task_interventions = TaskInterventionSerializer(many=True)
-    question_interventions = QuestionInterventionSerializer(many=True)
-    media_interventions = MediaInterventionSerializer(many=True)
+    emptyInterventions = EmptyInterventionSerializer(many=True)
+    taskInterventions = TaskInterventionSerializer(many=True)
+    questionInterventions = QuestionInterventionSerializer(many=True)
+    mediaInterventions = MediaInterventionSerializer(many=True)
 
     class Meta:
         model = ActiveEvent
         fields = ('id', 'type', 'title' , 'description',
-           'media_results', 'task_results', 'question_results', 'sensor_results',
+           'mediaResults', 'taskResults', 'questionResults', 'sensorResults',
            'triggers', 'sensors',
-           'empty_interventions', 'task_interventions', 'question_interventions', 'media_interventions' )
+           'emptyInterventions', 'taskInterventions', 'questionInterventions', 'mediaInterventions' )
 

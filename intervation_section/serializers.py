@@ -5,7 +5,7 @@ from intervation_section.models import *
 class MediaPresentationSerializer(serializers.ModelSerializer):
     class Meta:
         model = MediaPresentation
-        fields = ('id', 'type', 'media_url')
+        fields = ('id', 'type', 'mediaUrl')
 
 class ComplexConditionSerializer(serializers.ModelSerializer):
     # contacts = ObserverContactsSerializer(many=True)
@@ -30,7 +30,7 @@ class EmptyInterventionSerializer(serializers.ModelSerializer):
     class Meta:
         model = EmptyIntervention
         fields = ('id', 'type', 'statement','medias',
-            'order_position', 'first', 'next', 'obligatory'
+            'orderPosition', 'first', 'next', 'obligatory'
         )
 
     def create(self, validated_data):
@@ -52,8 +52,8 @@ class TaskInterventionSerializer(serializers.ModelSerializer):
     class Meta:
         model = TaskIntervention
         fields = ('id', 'type', 'statement','medias',
-            'order_position', 'first', 'next', 'obligatory',
-            'app_package'
+            'orderPosition', 'first', 'next', 'obligatory',
+            'appPackage'
         )
 
     def create(self, validated_data):
@@ -75,8 +75,8 @@ class MediaInterventionSerializer(serializers.ModelSerializer):
     class Meta:
         model = MediaIntervention
         fields = ('id', 'type', 'statement', 'medias',
-            'order_position', 'first', 'next', 'obligatory',
-            'media_type'
+            'orderPosition', 'first', 'next', 'obligatory',
+            'mediaType'
         )
 
     def create(self, validated_data):
@@ -101,8 +101,8 @@ class QuestionInterventionSerializer(serializers.ModelSerializer):
     class Meta:
         model = QuestionIntervention
         fields = ('id', 'type', 'statement', 'medias',
-            'order_position', 'first', 'next', 'obligatory',
-            'question_type', 'options', 'conditions', 'complexConditions'
+            'orderPosition', 'first', 'next', 'obligatory',
+            'questionType', 'options', 'conditions', 'complexConditions'
         )
 
     def create(self, validated_data):

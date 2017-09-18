@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
     'user_section',
     'sensor_section',
     'trigger_section',
@@ -48,6 +49,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE_CLASSES = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -141,13 +143,16 @@ if os.getcwd() == '/app':
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
     # Allow all host headers.
-    ALLOWED_HOSTS = ['*']
+    ALLOWED_HOSTS = []
     # Static asset configuration
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
     STATIC_ROOT = 'staticfiles'
     STATICFILES_DIRS = (
         os.path.join(BASE_DIR, 'static'),
     )
+
+    CORS_ORIGIN_ALLOW_ALL = True
+
 
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 

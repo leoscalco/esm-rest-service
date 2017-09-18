@@ -19,17 +19,17 @@ class Event(models.Model):
 class ActiveEvent(Event):
     type = models.CharField(max_length=50, default="active")
     # pensar uma melhor forma de resolver essa situacao (import de classe abstrata)
-    empty_interventions = models.ManyToManyField(EmptyIntervention, blank=True)
-    task_interventions = models.ManyToManyField(TaskIntervention, blank=True)
-    question_interventions = models.ManyToManyField(QuestionIntervention, blank=True)
-    media_interventions = models.ManyToManyField(MediaIntervention, blank=True)
+    emptyInterventions = models.ManyToManyField(EmptyIntervention, blank=True)
+    taskInterventions = models.ManyToManyField(TaskIntervention, blank=True)
+    questionInterventions = models.ManyToManyField(QuestionIntervention, blank=True)
+    mediaInterventions = models.ManyToManyField(MediaIntervention, blank=True)
 
     triggers = models.ManyToManyField(EventTrigger)
 
-    media_results = models.ManyToManyField(MediaResult, blank=True)
-    task_results = models.ManyToManyField(TaskResult, blank=True)
-    question_results = models.ManyToManyField(QuestionResult, blank=True)
-    sensor_results = models.ManyToManyField(SensorResult, blank=True)
+    mediaResults = models.ManyToManyField(MediaResult, blank=True)
+    taskResults = models.ManyToManyField(TaskResult, blank=True)
+    questionResults = models.ManyToManyField(QuestionResult, blank=True)
+    sensorResults = models.ManyToManyField(SensorResult, blank=True)
 
 
 class PassiveEvent(Event):

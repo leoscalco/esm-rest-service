@@ -9,17 +9,25 @@ class Sensor(models.Model):
     #   /** Used for capturing sensors during a event. */
     SENSOR_TYPE_TASK = models.IntegerField(default=1)
 
-    SENSOR_ACTIVITY = models.CharField(default="activity", max_length=50)
-    SENSOR_ACCELEROMETER = models.CharField(default="accelerometer", max_length=50)
-    SENSOR_CAMERA = models.CharField(default="camera", max_length=50)
-    SENSOR_LIGHT = models.CharField(default="light", max_length=50)
-    SENSOR_MICROPHONE = models.CharField(default="microphone", max_length=50)
+    SENSOR_ACTIVITY = "activity"
+    SENSOR_ACCELEROMETER = "accelerometer"
+    SENSOR_CAMERA = "camera"
+    SENSOR_LIGHT = "light"
+    SENSOR_MICROPHONE = "microphone"
+
+    # SENSOR_TYPE = (
+    #     ("ACT", SENSOR_ACTIVITY),
+    #     ("ACC", SENSOR_ACCELEROMETER),
+    #     ("CAM", SENSOR_CAMERA),
+    #     ("LIG", SENSOR_LIGHT),
+    #     ("MIC",SENSOR_MICROPHONE)
+    # )
 
     # /** Interval or whole event. */
-    sensor_type = models.IntegerField(null=False)
+    sensorType = models.IntegerField(null=False)
 
     # /** ACITIVTY, LIGHT, AUDIO, ETC. */
-    sensor = models.CharField(null=False, max_length=100)
+    sensor = models.CharField(max_length=20, default=SENSOR_ACTIVITY)
 
     def __unicode__(self):
         return u'%s' % self.sensor

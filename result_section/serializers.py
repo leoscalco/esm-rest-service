@@ -13,7 +13,7 @@ class MediaResultWriteSerializer(serializers.ModelSerializer):
     class Meta:
         model = MediaResult
         fields = ('id', 'type' ,'started', 'ended',
-            'url_for_data_file', 'media', 'participant')
+            'urlForDataFile', 'media', 'participant')
 
 class MediaResultReadSerializer(serializers.ModelSerializer):
     # just id without, dict with
@@ -23,7 +23,7 @@ class MediaResultReadSerializer(serializers.ModelSerializer):
     class Meta:
         model = MediaResult
         fields = ('id', 'type' ,'started', 'ended',
-            'url_for_data_file', 'media', 'participant')
+            'urlForDataFile', 'media', 'participant')
 
 class SensorResultWriteSerializer(serializers.ModelSerializer):
     # just id without, dict with
@@ -33,7 +33,7 @@ class SensorResultWriteSerializer(serializers.ModelSerializer):
     class Meta:
         model = SensorResult
         fields = ('id', 'type' ,'started', 'ended',
-            'url_for_data_file', 'sensor', 'participant')
+            'urlForDataFile', 'sensor', 'participant')
 
 class SensorResultReadSerializer(serializers.ModelSerializer):
     # just id without, dict with
@@ -43,7 +43,7 @@ class SensorResultReadSerializer(serializers.ModelSerializer):
     class Meta:
         model = SensorResult
         fields = ('id', 'type' ,'started', 'ended',
-            'url_for_data_file', 'sensor', 'participant')
+            'urlForDataFile', 'sensor', 'participant')
 
 class TaskResultWriteSerializer(serializers.ModelSerializer):
     # just id without, dict with
@@ -53,7 +53,7 @@ class TaskResultWriteSerializer(serializers.ModelSerializer):
     class Meta:
         model = TaskResult
         fields = ('id', 'type' ,'started', 'ended',
-            'url_for_data_file', 'task', 'participant')
+            'urlForDataFile', 'task', 'participant')
 
 class TaskResultReadSerializer(serializers.ModelSerializer):
     # just id without, dict with
@@ -63,7 +63,7 @@ class TaskResultReadSerializer(serializers.ModelSerializer):
     class Meta:
         model = TaskResult
         fields = ('id', 'type' ,'started', 'ended',
-            'url_for_data_file', 'task', 'participant')
+            'urlForDataFile', 'task', 'participant')
 
 class QuestionResultWriteSerializer(serializers.ModelSerializer):
     # just id without, dict with

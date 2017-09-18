@@ -9,8 +9,8 @@ class ProgramWriteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Program
         fields = (
-            'id', 'title', 'description', 'starts', 'ends', 'update_date',
-            'participants', 'observers', 'active_events'
+            'id', 'title', 'description', 'starts', 'ends', 'updateDate',
+            'participants', 'observers', 'activeEvents'
         )
 
 class ProgramReadSerializer(serializers.ModelSerializer):
@@ -22,6 +22,6 @@ class ProgramReadSerializer(serializers.ModelSerializer):
     class Meta:
         model = Program
         fields = (
-            'id', 'title', 'description', 'starts', 'ends', 'update_date',
-            'participants', 'observers', 'active_events'
+            'id', 'title', 'description', 'starts', 'ends', 'updateDate',
+            'participants', 'observers', 'activeEvents'
         )
