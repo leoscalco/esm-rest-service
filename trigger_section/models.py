@@ -15,11 +15,11 @@ class EventTrigger(models.Model):
         (CONTEXTUAL, "contextual"),
     )
 
-    trigger_type = models.CharField(
+    triggerType = models.CharField(
         max_length = 1,
         choices = TRIGGER_TYPE,
         default = TIME
     )
 
-    trigger_condition = models.CharField(max_length=50)
+    triggerCondition = models.CharField(max_length=50)
     priority = models.CharField(max_length=20)

@@ -7,6 +7,6 @@ class EventTriggerSerializer(serializers.ModelSerializer):
     class Meta:
         model = EventTrigger
         # fields = ('id', 'sensor_type', 'sensor')
-        fields = ('id', 'trigger_type', 'trigger_condition',
+        fields = ('id', 'triggerType', 'triggerCondition',
             'priority'
         )
