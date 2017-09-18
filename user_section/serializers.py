@@ -24,14 +24,14 @@ class ObserverSerializer(serializers.ModelSerializer):
         model = Observer
         fields = ('id', 'name', 'email', 'role', 'contacts')
 
-    # def create(self, validated_data):
-    #     contacts_data = validated_data.pop('contacts')
-    #     observer = Observer.objects.create(**validated_data)
+    def create(self, validated_data):
+        contacts_data = validated_data.pop('contacts')
+        observer = Observer.objects.create(**validated_data)
 
-    #     for contact in contacts_data:
-    #         # contact['email'] = "forc@email.com"
-    #         Participant.objects.create(observer=observer, **contact)
-    #     return observer
+        for contact in contacts_data:
+            # contact['email'] = "forc@email.com"
+            Participant.objects.create(observer=observer, **contact)
+        return observer
 
 
 class ParticipantSerializer(serializers.ModelSerializer):
