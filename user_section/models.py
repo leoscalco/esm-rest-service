@@ -7,7 +7,7 @@ from django.db import models
 
 class Person(models.Model):
     name = models.CharField(max_length=200)
-    email = models.EmailField(default='')
+    email = models.EmailField(default='', unique=True)
     # contacts = models.ManyToManyField("self", related_name='contatos', blank=True)
 
     class Meta:

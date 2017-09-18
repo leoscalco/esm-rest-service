@@ -15,7 +15,7 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
 class ObserverContactsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Participant
-        fields = ('id', 'name')
+        fields = ('id', 'name', 'email')
 
 class ObserverSerializer(serializers.ModelSerializer):
     contacts = ObserverContactsSerializer(many=True)
