@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, generics, mixins
 
 from django.contrib.auth.models import User, Group
 from rest_framework import viewsets
@@ -40,7 +40,7 @@ class ObserverList(APIView):
 
 class ObserverDetail(APIView):
     """
-    Retrieve, update or delete a snippet instance.
+    Retrieve, update or delete a observer instance.
     """
     def get_object(self, pk):
         try:
@@ -65,6 +65,28 @@ class ObserverDetail(APIView):
         person = self.get_object(pk)
         person.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+class ObserverByEmail(APIView):
+
+    def get(self, request, format=None):
+        try:
+            queryset = Observer.objects.get(email=request.GET.get('email'))
+            serializer = ObserverSerializer(queryset)
+            return Response(serializer.data)
+        except Observer.DoesNotExist:
+            return Response({"error":"E-mail not found."}, status=status.HTTP_404_NOT_FOUND)
+
+
+class ParticipantByEmail(APIView):
+
+   def get(self, request, format=None):
+        try:
+            queryset = Participant.objects.get(email=request.GET.get('email'))
+            serializer = ParticipantSerializer(queryset)
+            return Response(serializer.data)
+        except Participant.DoesNotExist:
+            return Response({"error":"E-mail not found."}, status=status.HTTP_404_NOT_FOUND)
+
 
 class ParticipantList(APIView):
     """
