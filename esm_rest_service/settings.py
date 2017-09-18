@@ -151,9 +151,10 @@ if os.getcwd() == '/app':
         os.path.join(BASE_DIR, 'static'),
     )
 
-    CORS_ORIGIN_ALLOW_ALL = True
+# CORS CONFIG
+CORS_ORIGIN_ALLOW_ALL = True
 
-
+# static
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
