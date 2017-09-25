@@ -17,8 +17,7 @@ class ActiveEventWriteSerializer(serializers.ModelSerializer):
         model = ActiveEvent
         fields = ('id', 'type', 'title' , 'description',
            'mediaResults', 'taskResults', 'questionResults', 'sensorResults',
-           'triggers', 'sensors',
-           'emptyInterventions', 'taskInterventions', 'questionInterventions', 'mediaInterventions' )
+           'triggers', 'sensors', 'interventions' )
 
 class ActiveEventReadSerializer(serializers.ModelSerializer):
     # just id without, dict with
@@ -30,15 +29,12 @@ class ActiveEventReadSerializer(serializers.ModelSerializer):
     triggers = EventTriggerSerializer(many=True)
     sensors = SensorSerializer(many=True)
 
-    emptyInterventions = EmptyInterventionSerializer(many=True)
-    taskInterventions = TaskInterventionSerializer(many=True)
-    questionInterventions = QuestionInterventionSerializer(many=True)
-    mediaInterventions = MediaInterventionSerializer(many=True)
+    interventions = InterventionSerializer(many=True)
 
     class Meta:
         model = ActiveEvent
         fields = ('id', 'type', 'title' , 'description',
            'mediaResults', 'taskResults', 'questionResults', 'sensorResults',
            'triggers', 'sensors',
-           'emptyInterventions', 'taskInterventions', 'questionInterventions', 'mediaInterventions' )
+           'interventions')
 
