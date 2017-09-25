@@ -6,7 +6,7 @@ from event_section.models import ActiveEvent, PassiveEvent
 
 class Program(models.Model):
     title = models.CharField(max_length=150)
-    description = models.CharField(max_length=300, null=True, blank=True)
+    description = models.CharField(max_length=300, default="", blank=True)
     starts = models.CharField(max_length=50)
     ends = models.CharField(max_length=50)
     updateDate = models.CharField(max_length=50)

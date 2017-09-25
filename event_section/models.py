@@ -8,7 +8,7 @@ from result_section.models import MediaResult, TaskResult, QuestionResult, Senso
 
 class Event(models.Model):
     title = models.CharField(max_length=100)
-    description = models.CharField(max_length=300, blank=True)
+    description = models.CharField(max_length=300, default="", blank=True)
     group = models.CharField(max_length=100)
 
     sensors = models.ManyToManyField(Sensor, blank=True)
