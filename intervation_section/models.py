@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from annoying.fields import JSONField
 
 # Create your models here.
 
@@ -34,7 +35,7 @@ class Intervention(models.Model):
     medias = models.ManyToManyField(MediaPresentation)
     orderPosition = models.IntegerField()
     first = models.BooleanField(default=False)
-    next = models.IntegerField()
+    next = models.CharField(default="1", max_length=50)
     obligatory = models.BooleanField(default=False)
 
 class EmptyIntervention(Intervention):
@@ -80,20 +81,22 @@ class QuestionIntervention(Intervention):
         choices=QUESTION_TYPE,
         default=0
     )
+    conditions = JSONField(blank=True, null=True)
+    options = JSONField(blank=True, null=True)
     complexConditions = models.ManyToManyField(ComplexCondition)
 
-class MAP_conditions(models.Model):
-    questionIntervention = models.ForeignKey(QuestionIntervention, related_name="conditions")
+# class MAP_conditions(models.Model):
+#     questionIntervention = models.ForeignKey(QuestionIntervention, related_name="conditions")
 
-    # key is the answer value
-    answer = models.CharField(max_length=300)
-    # question number to jump to.
-    value = models.IntegerField()
+#     # key is the answer value
+#     answer = models.CharField(max_length=300)
+#     # question number to jump to.
+#     value = models.IntegerField()
 
-class ARRAY_option(models.Model):
-    questionIntervention = models.ForeignKey(QuestionIntervention, related_name="options")
+# class ARRAY_option(models.Model):
+#     questionIntervention = models.ForeignKey(QuestionIntervention, related_name="options")
 
-    option = models.CharField(max_length=100)
+#     option = models.CharField(max_length=100)
 
 class TaskIntervention(Intervention):
     type = models.CharField(max_length=10, default="task")

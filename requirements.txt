@@ -2,11 +2,14 @@ appdirs==1.4.3
 dj-database-url==0.4.2
 dj-static==0.0.6
 Django==1.11.1
+django-annoying==0.10.3
 django-cors-headers==2.1.0
 djangorestframework==3.6.2
 gunicorn==19.7.1
 httpie==0.9.9
+jsonfield==2.0.2
 packaging==16.8
+psycopg2==2.7.3.1
 Pygments==2.2.0
 pyparsing==2.2.0
 pytz==2017.2
@@ -14,4 +17,3 @@ requests==2.13.0
 six==1.10.0
 static3==0.7.0
 whitenoise==3.3.0
-psycopg2>=2.6.1

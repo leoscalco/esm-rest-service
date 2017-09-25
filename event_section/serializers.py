@@ -27,7 +27,7 @@ class ActiveEventReadSerializer(serializers.ModelSerializer):
     questionResults = QuestionResultReadSerializer(many=True)
     sensorResults = SensorResultReadSerializer(many=True)
 
-    triggers = EventTriggerSerializer(many=True);
+    triggers = EventTriggerSerializer(many=True)
     sensors = SensorSerializer(many=True)
 
     emptyInterventions = EmptyInterventionSerializer(many=True)

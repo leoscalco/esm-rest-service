@@ -14,15 +14,23 @@ class ComplexConditionSerializer(serializers.ModelSerializer):
         model = ComplexCondition
         fields = ('id', 'value', 'type', 'condition', 'next')
 
-class MAPConditionsSerializer(serializers.ModelSerializer):
-     class Meta:
-        model = MAP_conditions
-        fields = ('id', 'answer', 'value')
+class JSONSerializerField(serializers.Field):
+    """ Serializer for JSONField -- required to make field writable"""
+    def to_internal_value(self, data):
+        print data
+        return data
+    def to_representation(self, value):
+        return value
 
-class ARRAY_OptionSerialzer(serializers.ModelSerializer):
-    class Meta:
-        model = ARRAY_option
-        fields = ('id', 'option')
+# class MAPConditionsSerializer(serializers.ModelSerializer):
+#      class Meta:
+#         model = MAP_conditions
+#         fields = ('id', 'answer', 'value')
+
+# class ARRAY_OptionSerialzer(serializers.ModelSerializer):
+#     class Meta:
+#         model = ARRAY_option
+#         fields = ('id', 'option')
 
 class InterventionSerializer(serializers.ModelSerializer):
     class Meta:
@@ -102,8 +110,8 @@ class MediaInterventionSerializer(serializers.ModelSerializer):
 class QuestionInterventionSerializer(serializers.ModelSerializer):
     medias = MediaPresentationSerializer(many=True)
     complexConditions = ComplexConditionSerializer(many=True)
-    options = ARRAY_OptionSerialzer(many=True)
-    conditions = MAPConditionsSerializer(many=True)
+    options = JSONSerializerField()
+    conditions = JSONSerializerField()
 
     class Meta:
         model = QuestionIntervention
@@ -115,8 +123,8 @@ class QuestionInterventionSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         medias_data = validated_data.pop('medias')
         complex_cond_data = validated_data.pop('complexConditions')
-        cond_data = validated_data.pop('conditions')
-        options_data = validated_data.pop('options')
+        # cond_data = validated_data.pop('conditions')
+        # options_data = validated_data.pop('options')
 
         arr_medias = []
         arr_compl = []
@@ -129,13 +137,13 @@ class QuestionInterventionSerializer(serializers.ModelSerializer):
             n = MediaPresentation.objects.create(**media_data)
             arr_medias.append(n.id)
 
-        for c in cond_data:
-            n = MAP_conditions.objects.create(questionIntervention=intervention, **c)
-            arr_cond.append(n.id)
+        # for c in cond_data:
+        #     n = MAP_conditions.objects.create(questionIntervention=intervention, **c)
+        #     arr_cond.append(n.id)
 
-        for o in options_data:
-            n = ARRAY_option.objects.create(questionIntervention=intervention, **o)
-            arr_opt.append(n.id)
+        # for o in options_data:
+        #     n = ARRAY_option.objects.create(questionIntervention=intervention, **o)
+        #     arr_opt.append(n.id)
 
         for cc in complex_cond_data:
             n = ComplexCondition.objects.create(**cc)
@@ -143,8 +151,8 @@ class QuestionInterventionSerializer(serializers.ModelSerializer):
 
         intervention.medias = arr_medias
         intervention.complexConditions = arr_compl
-        intervention.options = arr_opt
-        intervention.conditions = arr_cond
+        # intervention.options = arr_opt
+        # intervention.conditions = arr_cond
 
         intervention.save()
         return intervention
