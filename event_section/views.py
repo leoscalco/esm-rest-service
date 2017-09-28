@@ -7,8 +7,16 @@ from rest_framework import status
 
 from rest_framework import viewsets
 from event_section.serializers import *
-from event_section.models import ActiveEvent
+from event_section.models import ActiveEvent, Event
 
+class EventList(APIView):
+    """
+    List all events
+    """
+    def get(self, request, format=None):
+        event = Event.objects.all()
+        serializer = EventSerializer(event, many=True)
+        return Response(serializer.data)
 
 class ActiveEventList(APIView):
     """

@@ -1,12 +1,30 @@
 # from django.contrib.auth.models import User, Group
 from rest_framework import serializers
-from event_section.models import ActiveEvent
+from event_section.models import ActiveEvent, Event
 from result_section.serializers import *
 from trigger_section.serializers import EventTriggerSerializer;
 from sensor_section.serializers import SensorSerializer
 from intervation_section.serializers import *
 
 # PASSANDO SOMENTE O ID
+
+class EventSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Event
+        fields = ('id', 'type', 'title', 'description',
+            'group', 'sensors'
+        )
+
+    def to_representation(self, obj):
+        """
+        Because GalleryItem is Polymorphic
+        """
+        if obj.type == "active":
+            return ActiveEventReadSerializer(obj, context=self.context).to_representation(obj)
+
+        return super(EventSerializer, self).to_representation(obj)
+
 
 class ActiveEventWriteSerializer(serializers.ModelSerializer):
     # just id without, dict with

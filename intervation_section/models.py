@@ -30,6 +30,7 @@ class ComplexCondition(models.Model):
     next = models.IntegerField()
 
 class Intervention(models.Model):
+    type = models.CharField(max_length=10, default="empty")
     statement = models.CharField(max_length=100)
     medias = models.ManyToManyField(MediaPresentation)
     orderPosition = models.IntegerField()
@@ -38,7 +39,11 @@ class Intervention(models.Model):
     obligatory = models.BooleanField(default=False)
 
 class EmptyIntervention(Intervention):
-    type = models.CharField(max_length=10, default="empty")
+    # type = models.CharField(max_length=10, default="empty")
+
+    def __init__(self, *args, **kwargs):
+        kwargs['type'] = "empty"
+        super(EmptyIntervention, self).__init__(*args, **kwargs)
 
 class MediaIntervention(Intervention):
 
@@ -52,11 +57,15 @@ class MediaIntervention(Intervention):
     #     (VIDEO, "video"),
     # )
 
-    type = models.CharField(max_length=10, default="media")
+    # type = models.CharField(max_length=10, default="media")
     mediaType = models.CharField(
         max_length = 10,
         default = "image"
     )
+
+    def __init__(self, *args, **kwargs):
+        kwargs['type'] = "media"
+        super(MediaIntervention, self).__init__(*args, **kwargs)
 
 class QuestionIntervention(Intervention):
 
@@ -74,7 +83,7 @@ class QuestionIntervention(Intervention):
         (QUESTION_TYPE_SEMANTIC_DIFFERENTIAL, 'semantic_differential'),
     )
 
-    type = models.CharField(max_length=10, default="question")
+    # type = models.CharField(max_length=10, default="question")
     questionType = models.IntegerField(
         choices=QUESTION_TYPE,
         default=0
@@ -82,6 +91,10 @@ class QuestionIntervention(Intervention):
     conditions = JSONField(blank=True, null=True)
     options = JSONField(blank=True, null=True)
     complexConditions = models.ManyToManyField(ComplexCondition)
+
+    def __init__(self, *args, **kwargs):
+        kwargs['type'] = "question"
+        super(QuestionIntervention, self).__init__(*args, **kwargs)
 
 # class MAP_conditions(models.Model):
 #     questionIntervention = models.ForeignKey(QuestionIntervention, related_name="conditions")
@@ -97,5 +110,9 @@ class QuestionIntervention(Intervention):
 #     option = models.CharField(max_length=100)
 
 class TaskIntervention(Intervention):
-    type = models.CharField(max_length=10, default="task")
+    # type = models.CharField(max_length=10, default="task")
     appPackage = models.CharField(max_length=50)
+
+    def __init__(self, *args, **kwargs):
+        kwargs['type'] = "task"
+        super(TaskIntervention, self).__init__(*args, **kwargs)

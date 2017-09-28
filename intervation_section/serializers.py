@@ -17,8 +17,8 @@ class ComplexConditionSerializer(serializers.ModelSerializer):
 class JSONSerializerField(serializers.Field):
     """ Serializer for JSONField -- required to make field writable"""
     def to_internal_value(self, data):
-        print data
         return data
+
     def to_representation(self, value):
         return value
 
@@ -33,11 +33,27 @@ class JSONSerializerField(serializers.Field):
 #         fields = ('id', 'option')
 
 class InterventionSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Intervention
-        fields = ('id', 'statement','medias',
+        fields = ('id', 'type', 'statement','medias',
             'orderPosition', 'first', 'next', 'obligatory'
         )
+
+    def to_representation(self, obj):
+        """
+        Because GalleryItem is Polymorphic
+        """
+        if obj.type == "empty":
+            return EmptyInterventionSerializer(obj, context=self.context).to_representation(obj)
+        elif obj.type == "question":
+           return QuestionInterventionSerializer(obj, context=self.context).to_representation(obj)
+        elif obj.type == "task":
+           return TaskInterventionSerializer(obj, context=self.context).to_representation(obj)
+        elif obj.type == "media":
+           return MediaInterventionSerializer(obj, context=self.context).to_representation(obj)
+
+        return super(InterventionSerializer, self).to_representation(obj)
 
 class EmptyInterventionSerializer(serializers.ModelSerializer):
     medias = MediaPresentationSerializer(many=True)
