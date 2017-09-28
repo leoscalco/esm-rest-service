@@ -6,20 +6,19 @@ from annoying.fields import JSONField
 # Create your models here.
 
 class MediaPresentation(models.Model):
-    IMAGEM = "I"
-    AUDIO = "A"
-    VIDEO = "V"
+    # IMAGEM = "I"
+    # AUDIO = "A"
+    # VIDEO = "V"
 
-    TYPE = (
-        (IMAGEM, "imagem"),
-        (AUDIO, "audio"),
-        (VIDEO, "video"),
-    )
+    # TYPE = (
+    #     (IMAGEM, "imagem"),
+    #     (AUDIO, "audio"),
+    #     (VIDEO, "video"),
+    # )
 
     type = models.CharField(
-        max_length = 1,
-        choices = TYPE,
-        default = IMAGEM
+        max_length = 10,
+        default = "image"
     )
 
     mediaUrl = models.URLField()
@@ -43,21 +42,20 @@ class EmptyIntervention(Intervention):
 
 class MediaIntervention(Intervention):
 
-    IMAGEM = "I"
-    AUDIO = "A"
-    VIDEO = "V"
+    # IMAGEM = "I"
+    # AUDIO = "A"
+    # VIDEO = "V"
 
-    TYPE = (
-        (IMAGEM, "imagem"),
-        (AUDIO, "audio"),
-        (VIDEO, "video"),
-    )
+    # TYPE = (
+    #     (IMAGEM, "image"),
+    #     (AUDIO, "audio"),
+    #     (VIDEO, "video"),
+    # )
 
     type = models.CharField(max_length=10, default="media")
     mediaType = models.CharField(
-        max_length = 1,
-        choices = TYPE,
-        default = IMAGEM
+        max_length = 10,
+        default = "image"
     )
 
 class QuestionIntervention(Intervention):
