@@ -17,7 +17,7 @@ class ProgramReadSerializer(serializers.ModelSerializer):
 
     participants = ParticipantSerializer(many=True)
     observers = ObserverSerializer(many=True)
-    events = EventReadSerializer(many=True)
+    events = EventSerializer(many=True)
 
     class Meta:
         model = Program
