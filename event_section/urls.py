@@ -4,7 +4,7 @@ from rest_framework.urlpatterns import format_suffix_patterns
 
 
 urlpatterns = [
-    url(r'^events/$', views.ActiveEventList.as_view()),
+    url(r'^events/$', views.EventList.as_view()),
 
     url(r'^active-events/$', views.ActiveEventList.as_view()),
     # url(r'^task-interventions/$', views.TaskInterventionList.as_view()),

@@ -21,9 +21,10 @@ class EventSerializer(serializers.ModelSerializer):
         Because GalleryItem is Polymorphic
         """
         if obj.type == "active":
-            return ActiveEventReadSerializer(obj, context=self.context).to_representation(obj)
-
-        return super(EventSerializer, self).to_representation(obj)
+            obj = ActiveEvent.objects.get(id=obj.id)
+            return ActiveEventReadSerializer(context=self.context).to_representation(obj)
+        else:
+            return super(EventSerializer, self).to_representation(obj)
 
 
 class ActiveEventWriteSerializer(serializers.ModelSerializer):

@@ -32,6 +32,10 @@ class JSONSerializerField(serializers.Field):
 #         model = ARRAY_option
 #         fields = ('id', 'option')
 
+
+
+        # return super(InterventionSerializer, self).to_representation(obj)
+
 class InterventionSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -44,16 +48,21 @@ class InterventionSerializer(serializers.ModelSerializer):
         """
         Because GalleryItem is Polymorphic
         """
+
         if obj.type == "empty":
+            obj = EmptyIntervention.objects.get(id=obj.id)
             return EmptyInterventionSerializer(obj, context=self.context).to_representation(obj)
         elif obj.type == "question":
-           return QuestionInterventionSerializer(obj, context=self.context).to_representation(obj)
+            obj = QuestionIntervention.objects.get(id=obj.id)
+            return QuestionInterventionSerializer(obj, context=self.context).to_representation(obj)
         elif obj.type == "task":
-           return TaskInterventionSerializer(obj, context=self.context).to_representation(obj)
+            obj = TaskIntervention.objects.get(id=obj.id)
+            return TaskInterventionSerializer(obj, context=self.context).to_representation(obj)
         elif obj.type == "media":
-           return MediaInterventionSerializer(obj, context=self.context).to_representation(obj)
-
-        return super(InterventionSerializer, self).to_representation(obj)
+            obj = MediaIntervention.objects.get(id=obj.id)
+            return MediaInterventionSerializer(context=self.context).to_representation(obj)
+        else:
+            return super(InterventionSerializer, self).to_representation(obj)
 
 class EmptyInterventionSerializer(serializers.ModelSerializer):
     medias = MediaPresentationSerializer(many=True)

@@ -2,7 +2,7 @@ from __future__ import unicode_literals
 
 from django.db import models
 from user_section.models import Participant, Observer
-from event_section.models import ActiveEvent, PassiveEvent
+from event_section.models import ActiveEvent, PassiveEvent, Event
 
 class Program(models.Model):
     title = models.CharField(max_length=150)
@@ -13,5 +13,5 @@ class Program(models.Model):
 
     participants = models.ManyToManyField(Participant)
     observers = models.ManyToManyField(Observer)
-    activeEvents = models.ManyToManyField(ActiveEvent)
-    passiveEvents = models.ManyToManyField(PassiveEvent)
+    events = models.ManyToManyField(Event)
+    # passiveEvents = models.ManyToManyField(PassiveEvent)
