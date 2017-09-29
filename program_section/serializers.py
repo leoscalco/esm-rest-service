@@ -10,7 +10,7 @@ class ProgramWriteSerializer(serializers.ModelSerializer):
         model = Program
         fields = (
             'id', 'title', 'description', 'starts', 'ends', 'updateDate',
-            'participants', 'observers', 'activeEvents'
+            'participants', 'observers', 'events'
         )
 
 class ProgramReadSerializer(serializers.ModelSerializer):
