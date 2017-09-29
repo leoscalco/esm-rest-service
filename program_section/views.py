@@ -53,3 +53,18 @@ class ProgramDetail(APIView):
         program = self.get_object(pk)
         Program.delete(program)
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+class ProgramsByEmail(APIView):
+
+    def get(self, request, format=None):
+        observer = Observer.objects.get(email=request.GET.get('email'))
+        try:
+            queryset = Program.objects.filter(observers__id=observer.id)
+            if not len(queryset):
+                return Response({"error":"Observer without programs."}, status=status.HTTP_404_NOT_FOUND)
+            else:
+                serializer = ProgramReadSerializer(queryset, many=True)
+                return Response(serializer.data)
+        except Program.DoesNotExist:
+            return Response({"error":"E-mail not found."}, status=status.HTTP_404_NOT_FOUND)
+
