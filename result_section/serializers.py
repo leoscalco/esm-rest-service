@@ -5,6 +5,33 @@ from user_section.serializers import ParticipantSerializer
 from intervation_section.serializers import MediaInterventionSerializer, TaskInterventionSerializer, QuestionInterventionSerializer
 from sensor_section.serializers import SensorSerializer
 
+class ResultsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Result
+        fields = ('id', 'type' ,'started', 'ended', 'participant'
+        )
+
+    def to_representation(self, obj):
+        """
+        Because Results is Polymorphic
+        """
+        if obj.type == "sensor":
+            obj = SensorResult.objects.get(id=obj.id)
+            return SensorResultReadSerializer(obj, context=self.context).to_representation(obj)
+        elif obj.type == "question":
+            obj = QuestionResult.objects.get(id=obj.id)
+            return QuestionResultReadSerializer(obj, context=self.context).to_representation(obj)
+        elif obj.type == "task":
+            obj = TaskResult.objects.get(id=obj.id)
+            return TaskResultReadSerializer(obj, context=self.context).to_representation(obj)
+        elif obj.type == "media":
+            obj = MediaResult.objects.get(id=obj.id)
+            return MediaResultReadSerializer(context=self.context).to_representation(obj)
+        else:
+            return super(ResultsSerializer, self).to_representation(obj)
+
+
 class MediaResultWriteSerializer(serializers.ModelSerializer):
     # just id without, dict with
     # participant = ParticipantSerializer(read_only=True)

@@ -9,6 +9,13 @@ from rest_framework import viewsets
 from result_section.serializers import *
 from result_section.models import MediaResult, TaskResult, SensorResult, QuestionResult
 
+class ResultsList(APIView):
+
+    def get(self, request, format=None):
+        results = Result.objects.all()
+        serializer = ResultsSerializer(results, many=True)
+        return Response(serializer.data)
+
 class MediaResultList(APIView):
     """
     List all taskresults, or create a new taskresult

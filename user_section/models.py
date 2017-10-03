@@ -17,15 +17,16 @@ class Person(models.Model):
     def __unicode__(self):
         return u'%s' % self.name
 
-class Observer(Person):
-    role = models.CharField(max_length=50)
-
 class Participant(Person):
 
-    observerResponsible = models.ForeignKey(Observer, related_name="contacts", on_delete=models.CASCADE, default=1)
+    # observerResponsible = models.ForeignKey(Observer, related_name="contacts", on_delete=models.CASCADE, default=1)
 
     def __unicode__(self):
         return u'%s' % self.name
+
+class Observer(Person):
+    role = models.CharField(max_length=50)
+    contacts = models.ManyToManyField(Participant, related_name='contacts', blank=True)
 
 class Admin(Person):
     password = models.CharField(max_length=20)

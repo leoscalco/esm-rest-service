@@ -4,6 +4,8 @@ from rest_framework.urlpatterns import format_suffix_patterns
 
 
 urlpatterns = [
+    url(r'^results/$', views.ResultsList.as_view()),
+
     url(r'^media-results/$', views.MediaResultList.as_view()),
     url(r'^task-results/$', views.TaskResultList.as_view()),
     url(r'^sensor-results/$', views.SensorResultList.as_view()),

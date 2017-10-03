@@ -10,26 +10,42 @@ from sensor_section.models import Sensor
 class Result(models.Model):
     started = models.CharField(max_length=50, blank=True)
     ended = models.CharField(max_length=50, blank=True)
-
+    type = models.CharField(max_length=10, default="question")
     participant = models.ForeignKey(Participant)
 
 class MediaResult(Result):
     media = models.ForeignKey(MediaIntervention, null=True, blank=True)
-    type = models.CharField(max_length=50, default="media")
+    # type = models.CharField(max_length=50, default="media")
     urlForDataFile = models.URLField(blank=True)
+
+    def __init__(self, *args, **kwargs):
+        kwargs['type'] = "media"
+        super(MediaResult, self).__init__(*args, **kwargs)
 
 class QuestionResult(Result):
     question = models.ForeignKey(QuestionIntervention)
-    type = models.CharField(max_length=50, default="question")
+    # type = models.CharField(max_length=50, default="question")
     answer = models.CharField(max_length=100)
+
+    def __init__(self, *args, **kwargs):
+        kwargs['type'] = "question"
+        super(QuestionResult, self).__init__(*args, **kwargs)
 
 class SensorResult(Result):
     sensor = models.ForeignKey(Sensor)
-    type = models.CharField(max_length=50, default="sensor")
+    # type = models.CharField(max_length=50, default="sensor")
     urlForDataFile = models.URLField()
+
+    def __init__(self, *args, **kwargs):
+        kwargs['type'] = "sensor"
+        super(SensorResult, self).__init__(*args, **kwargs)
 
 class TaskResult(Result):
     task = models.ForeignKey(TaskIntervention)
-    type = models.CharField(max_length=50, default="task")
+    # type = models.CharField(max_length=50, default="task")
     urlForDataFile = models.URLField()
+
+    def __init__(self, *args, **kwargs):
+        kwargs['type'] = "task"
+        super(TaskResult, self).__init__(*args, **kwargs)
 

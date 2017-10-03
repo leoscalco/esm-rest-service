@@ -17,21 +17,27 @@ class ObserverContactsSerializer(serializers.ModelSerializer):
         model = Participant
         fields = ('id', 'name', 'email')
 
-class ObserverSerializer(serializers.ModelSerializer):
+class ObserverWriteSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Observer
+        fields = ('id', 'name', 'email', 'role', 'contacts')
+
+class ObserverReadSerializer(serializers.ModelSerializer):
     contacts = ObserverContactsSerializer(many=True)
 
     class Meta:
         model = Observer
         fields = ('id', 'name', 'email', 'role', 'contacts')
 
-    def create(self, validated_data):
-        contacts_data = validated_data.pop('contacts')
-        observer = Observer.objects.create(**validated_data)
+    # def create(self, validated_data):
+    #     contacts_data = validated_data.pop('contacts')
+    #     observer = Observer.objects.create(**validated_data)
 
-        for contact in contacts_data:
-            # contact['email'] = "forc@email.com"
-            Participant.objects.create(observer=observer, **contact)
-        return observer
+    #     for contact in contacts_data:
+    #         # contact['email'] = "forc@email.com"
+    #         Participant.objects.create(observer=observer, **contact)
+    #     return observer
 
 
 class ParticipantSerializer(serializers.ModelSerializer):
@@ -39,7 +45,9 @@ class ParticipantSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Participant
-        fields = ('id', 'name', 'email', 'observerResponsible')
+        fields = ('id', 'name', 'email',
+            # 'observerResponsible'
+            )
     # id = serializers.IntegerField(read_only=True)
     # name = serializers.CharField(max_length=200)
     # email = serializers.EmailField(required=True)

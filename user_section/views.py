@@ -28,11 +28,11 @@ class ObserverList(APIView):
     """
     def get(self, request, format=None):
         persons = Observer.objects.all()
-        serializer = ObserverSerializer(persons, many=True)
+        serializer = ObserverReadSerializer(persons, many=True)
         return Response(serializer.data)
 
     def post(self, request, format=None):
-        serializer = ObserverSerializer(data=request.data)
+        serializer = ObserverWriteSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -50,12 +50,12 @@ class ObserverDetail(APIView):
 
     def get(self, request, pk, format=None):
         person = self.get_object(pk)
-        serializer = ObserverSerializer(person)
+        serializer = ObserverReadSerializer(person)
         return Response(serializer.data)
 
     def put(self, request, pk, format=None):
         person = self.get_object(pk)
-        serializer = ObserverSerializer(person, data=request.data)
+        serializer = ObserverWriteSerializer(person, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -71,7 +71,7 @@ class ObserverByEmail(APIView):
     def get(self, request, format=None):
         try:
             queryset = Observer.objects.get(email=request.GET.get('email'))
-            serializer = ObserverSerializer(queryset)
+            serializer = ObserverReadSerializer(queryset)
             return Response(serializer.data)
         except Observer.DoesNotExist:
             return Response({"error":"E-mail not found."}, status=status.HTTP_404_NOT_FOUND)
