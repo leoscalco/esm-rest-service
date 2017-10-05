@@ -146,11 +146,18 @@ class SensorResultList(APIView):
     """
     def get(self, request, format=None):
         result = SensorResult.objects.all()
-        serializer = SensorResultReadSerializer(result, many=True)
+        if (request.GET.get('verbose') == 'true'):
+            serializer = SensorResultVerboseSerializer(result, many=True)
+        else:
+            serializer = SensorResultSerializer(result, many=True)
         return Response(serializer.data)
 
     def post(self, request, format=None):
-        serializer = SensorResultWriteSerializer(data=request.data)
+        if (request.GET.get('verbose') == 'true'):
+            serializer = SensorResultVerboseSerializer(data=request.data)
+        else:
+            serializer = SensorResultSerializer(data=request.data)
+
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -167,13 +174,23 @@ class SensorResultDetail(APIView):
             raise Http404
 
     def get(self, request, pk, format=None):
+
         result = self.get_object(pk)
-        serializer = SensorResultReadSerializer(result)
+        if (request.GET.get('verbose') == 'true'):
+            serializer = SensorResultVerboseSerializer(result)
+        else:
+            serializer = SensorResultSerializer(result)
+
         return Response(serializer.data)
 
     def put(self, request, pk, format=None):
         result = self.get_object(pk)
-        serializer = SensorResultWriteSerializer(result, data=request.data)
+
+        if (request.GET.get('verbose') == 'true'):
+            serializer = SensorResultVerboseSerializer(result, data=request.data)
+        else:
+            serializer = SensorResultSerializer(result, data=request.data)
+
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -190,11 +207,20 @@ class QuestionResultList(APIView):
     """
     def get(self, request, format=None):
         result = QuestionResult.objects.all()
-        serializer = QuestionResultReadSerializer(result, many=True)
+
+        if (request.GET.get('verbose') == 'true'):
+            serializer = QuestionResultVerboseSerializer(result, many=True)
+        else:
+            serializer = QuestionResultSerializer(result, many=True)
+
         return Response(serializer.data)
 
     def post(self, request, format=None):
-        serializer = QuestionResultWriteSerializer(data=request.data)
+        if (request.GET.get('verbose') == 'true'):
+            serializer = QuestionResultVerboseSerializer(data=request.data)
+        else:
+            serializer = QuestionResultSerializer(data=request.data)
+
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -212,12 +238,20 @@ class QuestionResultDetail(APIView):
 
     def get(self, request, pk, format=None):
         result = self.get_object(pk)
-        serializer = QuestionResultReadSerializer(result)
+        if (request.GET.get('verbose') == 'true'):
+            serializer = QuestionResultVerboseSerializer(result)
+        else:
+            serializer = QuestionResultSerializer(result)
+
         return Response(serializer.data)
 
     def put(self, request, pk, format=None):
         result = self.get_object(pk)
-        serializer = QuestionResultWriteSerializer(result, data=request.data)
+        if (request.GET.get('verbose') == 'true'):
+            serializer = QuestionResultVerboseSerializer(result, data=request.data)
+        else:
+            serializer = QuestionResultSerializer(result, data=request.data)
+
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)

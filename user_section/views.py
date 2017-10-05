@@ -89,7 +89,7 @@ class ObserverByEmail(APIView):
     def get(self, request, format=None):
         try:
             queryset = Observer.objects.get(email=request.GET.get('email'))
-            serializer = ObserverReadSerializer(queryset)
+            serializer = ObserverVerboseSerializer(queryset)
             return Response(serializer.data)
         except Observer.DoesNotExist:
             return Response({"error":"E-mail not found."}, status=status.HTTP_404_NOT_FOUND)
