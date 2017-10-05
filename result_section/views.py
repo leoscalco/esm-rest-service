@@ -7,7 +7,32 @@ from rest_framework import status
 
 from rest_framework import viewsets
 from result_section.serializers import *
-from result_section.models import MediaResult, TaskResult, SensorResult, QuestionResult
+from result_section.models import *
+
+class ResultSessionList(APIView):
+
+    def get(self, request, format=None):
+        results_s = ResultSession.objects.all()
+
+        if (request.GET.get('verbose') == 'true'):
+            serializer = ResultSessionVerboseSerializer(results_s, many=True)
+        else:
+            serializer = ResultSessionSerializer(results_s, many=True)
+
+        # serializer = Res(results, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, format=None):
+        if (request.GET.get('verbose') == 'true'):
+            serializer = ResultSessionVerboseSerializer(data=request.data)
+        else:
+            serializer = ResultSessionSerializer(data=request.data)
+            print "Hello"
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class ResultsList(APIView):
 
@@ -32,7 +57,11 @@ class MediaResultList(APIView):
         return Response(serializer.data)
 
     def post(self, request, format=None):
-        serializer = MediaResultSerializer(data=request)
+        if (request.GET.get('verbose') == 'true'):
+            serializer = MediaResultVerboseSerializer(data=request.data)
+        else:
+            serializer = MediaResultSerializer(data=request.data)
+
 
         if serializer.is_valid():
             serializer.save()

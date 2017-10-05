@@ -5,7 +5,7 @@ from event_section.models import ActiveEvent, Event
 from trigger_section.models import EventTrigger as Trigger
 from intervation_section.models import *
 from sensor_section.models import Sensor
-from result_section.models import *
+# from result_section.models import *
 
 
 from result_section.serializers import *
@@ -30,13 +30,13 @@ class EventSerializer(serializers.ModelSerializer):
         """
         if obj.type == "active":
             obj = ActiveEvent.objects.get(id=obj.id)
-            return ActiveEventReadSerializer(context=self.context).to_representation(obj)
+            return ActiveEventVerboseSerializer(context=self.context).to_representation(obj)
         else:
             return super(EventSerializer, self).to_representation(obj)
 
 class EventVerboseSerializer(serializers.ModelSerializer):
 
-    results = ResultsSerializer(many=True)
+    # results = ResultsSerializer(many=True)
     triggers = EventTriggerSerializer(many=True)
     sensors = SensorSerializer(many=True)
 
@@ -45,7 +45,7 @@ class EventVerboseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
         fields = ('id', 'type', 'title', 'description',
-        'triggers', 'sensors', 'interventions', 'results'
+        'triggers', 'sensors', 'interventions'
         )
 
     def to_representation(self, obj):
@@ -59,8 +59,6 @@ class EventVerboseSerializer(serializers.ModelSerializer):
             return super(EventSerializer, self).to_representation(obj)
 
 
-
-
 class ActiveEventSerializer(serializers.ModelSerializer):
     # just id without, dict with
     # participant = ParticipantSerializer(read_only=True)
@@ -69,12 +67,11 @@ class ActiveEventSerializer(serializers.ModelSerializer):
     class Meta:
         model = ActiveEvent
         fields = ('id', 'type', 'title' , 'description',
-           'results',
            'triggers', 'sensors', 'interventions' )
 
 class ActiveEventVerboseSerializer(serializers.ModelSerializer):
     # just id without, dict with
-    results = ResultsSerializer(many=True)
+    # results = ResultsSerializer(many=True)
 
     triggers = EventTriggerSerializer(many=True)
     sensors = SensorSerializer(many=True)
@@ -84,7 +81,6 @@ class ActiveEventVerboseSerializer(serializers.ModelSerializer):
     class Meta:
         model = ActiveEvent
         fields = ('id', 'type', 'title' , 'description',
-           'results',
            'triggers', 'sensors',
            'interventions')
 
@@ -97,7 +93,7 @@ class ActiveEventVerboseSerializer(serializers.ModelSerializer):
         interventions_data = validated_data.pop('interventions')
         triggers_data = validated_data.pop('triggers')
         sensors_data = validated_data.pop('sensors')
-        results_data = validated_data.pop('results')
+        # results_data = validated_data.pop('results')
 
         triggers = []
         for t in triggers_data:

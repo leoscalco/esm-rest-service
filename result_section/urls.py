@@ -4,6 +4,7 @@ from rest_framework.urlpatterns import format_suffix_patterns
 
 
 urlpatterns = [
+    url(r'^results-session/$', views.ResultSessionList.as_view()),
     url(r'^results/$', views.ResultsList.as_view()),
 
     url(r'^media-results/$', views.MediaResultList.as_view()),

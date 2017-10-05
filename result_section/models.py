@@ -2,21 +2,23 @@ from __future__ import unicode_literals
 
 from django.db import models
 from user_section.models import Participant
-# from event_section.models import Event
+from event_section.models import Event
 from intervation_section.models import MediaIntervention, QuestionIntervention, TaskIntervention
 from sensor_section.models import Sensor
 # Create your models here.
-
-# class ResultSession:
-#     participant = models.ForeignKey(Participant)
-#     event = models.ForeignKey(Event)
-#     results = models.ManyToManyField(Result)
 
 class Result(models.Model):
     started = models.CharField(max_length=50, blank=True)
     ended = models.CharField(max_length=50, blank=True)
     type = models.CharField(max_length=10, default="question")
+    # participant = models.ForeignKey(Participant)
+
+class ResultSession(models.Model):
+    started = models.CharField(max_length=50, blank=True)
+    ended = models.CharField(max_length=50, blank=True)
     participant = models.ForeignKey(Participant)
+    event = models.ForeignKey(Event)
+    results = models.ManyToManyField(Result)
 
 class MediaResult(Result):
     media = models.ForeignKey(MediaIntervention, null=True, blank=True)
