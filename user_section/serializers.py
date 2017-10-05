@@ -17,28 +17,59 @@ class ObserverContactsSerializer(serializers.ModelSerializer):
         model = Participant
         fields = ('id', 'name', 'email')
 
-class ObserverWriteSerializer(serializers.ModelSerializer):
+class ObserverSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Observer
         fields = ('id', 'name', 'email', 'role', 'contacts')
 
-class ObserverReadSerializer(serializers.ModelSerializer):
+class ObserverVerboseSerializer(serializers.ModelSerializer):
     contacts = ObserverContactsSerializer(many=True)
 
     class Meta:
         model = Observer
         fields = ('id', 'name', 'email', 'role', 'contacts')
 
-    # def create(self, validated_data):
-    #     contacts_data = validated_data.pop('contacts')
-    #     observer = Observer.objects.create(**validated_data)
+    def create(self, validated_data):
+        # contacts_data = validated_data.get('contacts')
+        contacts_data = validated_data.pop('contacts')
+        participants = []
+        for contact in contacts_data:
+            # contact['email'] = "forc@email.com"
+            participants.append(Participant.objects.create(**contact))
 
-    #     for contact in contacts_data:
-    #         # contact['email'] = "forc@email.com"
-    #         Participant.objects.create(observer=observer, **contact)
-    #     return observer
+        print participants
+        # validated_data['contacts'] = participants
 
+        observer = Observer.objects.create(
+            **validated_data
+            )
+
+        for p in participants:
+            observer.contacts.add(p)
+
+        observer.save()
+
+        return observer
+
+    def update(self, instance, validated_data):
+        # print validated_data
+
+        instance.name = validated_data.get('name', instance.name)
+        instance.email = validated_data.get('email', instance.email)
+        instance.role = validated_data.get('role', instance.role)
+
+        contacts_data = validated_data.pop('contacts')
+
+        for i in range(len(contacts_data)):
+            p = Participant.objects.get(email=instance.contacts.all()[i].email)
+            p.name = contacts_data[i]['name']
+            p.email = contacts_data[i]['email']
+            p.save()
+
+        instance.save()
+
+        return instance
 
 class ParticipantSerializer(serializers.ModelSerializer):
     # contacts = ContactsSerializer(many=False)

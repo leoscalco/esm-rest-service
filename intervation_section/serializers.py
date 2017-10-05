@@ -38,6 +38,7 @@ class JSONSerializerField(serializers.Field):
 
 class InterventionSerializer(serializers.ModelSerializer):
 
+    medias = MediaPresentationSerializer(many=True)
     class Meta:
         model = Intervention
         fields = ('id', 'type', 'statement','medias',
@@ -103,7 +104,7 @@ class TaskInterventionSerializer(serializers.ModelSerializer):
             n = MediaPresentation.objects.create(**media_data)
             arr.append(n.id)
         # validated_data['medias'] = arr
-        print validated_data
+
         intervention = TaskIntervention.objects.create(**validated_data)
         intervention.medias = arr
         intervention.save()

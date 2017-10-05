@@ -6,11 +6,12 @@ from intervation_section.serializers import MediaInterventionSerializer, TaskInt
 from sensor_section.serializers import SensorSerializer
 
 class ResultsSerializer(serializers.ModelSerializer):
+    # media = MediaInterventionSerializer()
+    participant = ParticipantSerializer()
 
     class Meta:
         model = Result
-        fields = ('id', 'type' ,'started', 'ended', 'participant'
-        )
+        fields = ('id', 'type' ,'started', 'ended', 'participant')
 
     def to_representation(self, obj):
         """
@@ -32,7 +33,7 @@ class ResultsSerializer(serializers.ModelSerializer):
             return super(ResultsSerializer, self).to_representation(obj)
 
 
-class MediaResultWriteSerializer(serializers.ModelSerializer):
+class MediaResultSerializer(serializers.ModelSerializer):
     # just id without, dict with
     # participant = ParticipantSerializer(read_only=True)
     # media = MediaInterventionSerializer()
@@ -42,7 +43,7 @@ class MediaResultWriteSerializer(serializers.ModelSerializer):
         fields = ('id', 'type' ,'started', 'ended',
             'urlForDataFile', 'media', 'participant')
 
-class MediaResultReadSerializer(serializers.ModelSerializer):
+class MediaResultVerboseSerializer(serializers.ModelSerializer):
     # just id without, dict with
     participant = ParticipantSerializer()
     media = MediaInterventionSerializer()
@@ -52,7 +53,7 @@ class MediaResultReadSerializer(serializers.ModelSerializer):
         fields = ('id', 'type' ,'started', 'ended',
             'urlForDataFile', 'media', 'participant')
 
-class SensorResultWriteSerializer(serializers.ModelSerializer):
+class SensorResultSerializer(serializers.ModelSerializer):
     # just id without, dict with
     # participant = ParticipantSerializer(read_only=True)
     # media = MediaInterventionSerializer()
@@ -62,7 +63,7 @@ class SensorResultWriteSerializer(serializers.ModelSerializer):
         fields = ('id', 'type' ,'started', 'ended',
             'urlForDataFile', 'sensor', 'participant')
 
-class SensorResultReadSerializer(serializers.ModelSerializer):
+class SensorResultVerboseSerializer(serializers.ModelSerializer):
     # just id without, dict with
     participant = ParticipantSerializer()
     sensor = SensorSerializer()
@@ -72,7 +73,7 @@ class SensorResultReadSerializer(serializers.ModelSerializer):
         fields = ('id', 'type' ,'started', 'ended',
             'urlForDataFile', 'sensor', 'participant')
 
-class TaskResultWriteSerializer(serializers.ModelSerializer):
+class TaskResultSerializer(serializers.ModelSerializer):
     # just id without, dict with
     # participant = ParticipantSerializer(read_only=True)
     # media = MediaInterventionSerializer()
@@ -82,7 +83,7 @@ class TaskResultWriteSerializer(serializers.ModelSerializer):
         fields = ('id', 'type' ,'started', 'ended',
             'urlForDataFile', 'task', 'participant')
 
-class TaskResultReadSerializer(serializers.ModelSerializer):
+class TaskResultVerboseSerializer(serializers.ModelSerializer):
     # just id without, dict with
     participant = ParticipantSerializer()
     task = TaskInterventionSerializer()
@@ -92,7 +93,7 @@ class TaskResultReadSerializer(serializers.ModelSerializer):
         fields = ('id', 'type' ,'started', 'ended',
             'urlForDataFile', 'task', 'participant')
 
-class QuestionResultWriteSerializer(serializers.ModelSerializer):
+class QuestionResultSerializer(serializers.ModelSerializer):
     # just id without, dict with
     # participant = ParticipantSerializer(read_only=True)
     # media = MediaInterventionSerializer()
@@ -102,7 +103,7 @@ class QuestionResultWriteSerializer(serializers.ModelSerializer):
         fields = ('id', 'type' ,'started', 'ended',
             'answer', 'question', 'participant')
 
-class QuestionResultReadSerializer(serializers.ModelSerializer):
+class QuestionResultVerboseSerializer(serializers.ModelSerializer):
     # just id without, dict with
     participant = ParticipantSerializer()
     question = QuestionInterventionSerializer()

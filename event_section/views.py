@@ -24,11 +24,19 @@ class ActiveEventList(APIView):
     """
     def get(self, request, format=None):
         event = ActiveEvent.objects.all()
-        serializer = ActiveEventReadSerializer(event, many=True)
+        if (request.GET.get('verbose') == 'true'):
+            serializer = ActiveEventVerboseSerializer(event, many=True)
+        else:
+            serializer = ActiveEventSerializer(event, many=True)
         return Response(serializer.data)
 
     def post(self, request, format=None):
-        serializer = ActiveEventWriteSerializer(data=request.data)
+
+        if (request.GET.get('verbose') == 'true'):
+            serializer = ActiveEventVerboseSerializer(data=request.data)
+        else:
+            serializer = ActiveEventSerializer(data=request.data)
+
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -46,12 +54,21 @@ class ActiveEventDetail(APIView):
 
     def get(self, request, pk, format=None):
         event = self.get_object(pk)
-        serializer = ActiveEventReadSerializer(event)
+        if (request.GET.get('verbose') == 'true'):
+            serializer = ActiveEventVerboseSerializer(event)
+        else:
+            serializer = ActiveEventSerializer(event)
+
         return Response(serializer.data)
 
     def put(self, request, pk, format=None):
         event = self.get_object(pk)
-        serializer = ActiveEventWriteSerializer(event, data=request.data)
+
+        if (request.GET.get('verbose') == 'true'):
+            serializer = ActiveEventVerboseSerializer(data=request.data)
+        else:
+            serializer = ActiveEventSerializer(data=request.data)
+
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)

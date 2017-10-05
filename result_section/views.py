@@ -22,11 +22,18 @@ class MediaResultList(APIView):
     """
     def get(self, request, format=None):
         result = MediaResult.objects.all()
-        serializer = MediaResultReadSerializer(result, many=True)
+
+        if (request.GET.get('verbose') == 'true'):
+            serializer = MediaResultVerboseSerializer(result, many=True)
+        else:
+            serializer = MediaResultSerializer(result, many=True)
+
+        # serializer = MediaResultReadSerializer(result, many=True)
         return Response(serializer.data)
 
     def post(self, request, format=None):
-        serializer = MediaResultWriteSerializer(data=request.data)
+        serializer = MediaResultSerializer(data=request)
+
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -44,12 +51,23 @@ class MediaResultDetail(APIView):
 
     def get(self, request, pk, format=None):
         result = self.get_object(pk)
-        serializer = MediaResultReadSerializer(result)
+
+        if (request.GET.get('verbose') == 'true'):
+            serializer = MediaResultVerboseSerializer(result)
+        else:
+            serializer = MediaResultSerializer(result)
+        # serializer = MediaResultReadSerializer(result)
         return Response(serializer.data)
 
     def put(self, request, pk, format=None):
         result = self.get_object(pk)
-        serializer = MediaResultWriteSerializer(result, data=request.data)
+
+        if (request.GET.get('verbose') == 'true'):
+            serializer = MediaResultVerboseSerializer(result, data=request.data)
+        else:
+            serializer = MediaResultSerializer(result, data=request.data)
+
+        # serializer = MediaResultWriteSerializer(result, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -66,11 +84,20 @@ class TaskResultList(APIView):
     """
     def get(self, request, format=None):
         result = TaskResult.objects.all()
-        serializer = TaskResultReadSerializer(result, many=True)
+
+        if (request.GET.get('verbose') == 'true'):
+            serializer = TaskResultVerboseSerializer(result, many=True)
+        else:
+            serializer = TaskResultSerializer(result, many=True)
+
         return Response(serializer.data)
 
     def post(self, request, format=None):
-        serializer = TaskResultWriteSerializer(data=request.data)
+        if (request.GET.get('verbose') == 'true'):
+            serializer = TaskResultVerboseSerializer(data=request.data)
+        else:
+            serializer = TaskResultSerializer(data=request.data)
+
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -88,12 +115,20 @@ class TaskResultDetail(APIView):
 
     def get(self, request, pk, format=None):
         result = self.get_object(pk)
-        serializer = TaskResultReadSerializer(result)
+        if (request.GET.get('verbose') == 'true'):
+            serializer = TaskResultVerboseSerializer(result)
+        else:
+            serializer = TaskResultSerializer(result)
+
         return Response(serializer.data)
 
     def put(self, request, pk, format=None):
         result = self.get_object(pk)
-        serializer = TaskResultWriteSerializer(result, data=request.data)
+        if (request.GET.get('verbose') == 'true'):
+            serializer = TaskResultVerboseSerializer(result, data=request.data)
+        else:
+            serializer = TaskResultSerializer(result, data=request.data)
+
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)

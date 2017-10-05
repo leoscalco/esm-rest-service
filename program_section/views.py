@@ -16,11 +16,21 @@ class ProgramList(APIView):
     """
     def get(self, request, format=None):
         program = Program.objects.all()
-        serializer = ProgramReadSerializer(program, many=True)
+        if (request.GET.get('verbose') == 'true'):
+            serializer = ProgramVerboseSerializer(program, many=True)
+        else:
+            serializer = ProgramSerializer(program, many=True)
+
         return Response(serializer.data)
 
     def post(self, request, format=None):
-        serializer = ProgramWriteSerializer(data=request.data)
+
+        if (request.GET.get('verbose') == 'true'):
+            serializer = ProgramVerboseSerializer(data=request.data)
+        else:
+            serializer = ProgramSerializer(data=request.data)
+
+        # serializer = ProgramWriteSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -38,12 +48,21 @@ class ProgramDetail(APIView):
 
     def get(self, request, pk, format=None):
         program = self.get_object(pk)
-        serializer = ProgramReadSerializer(program)
+        if (request.GET.get('verbose') == 'true'):
+            serializer = ProgramVerboseSerializer(program)
+        else:
+            serializer = ProgramSerializer(program)
+
         return Response(serializer.data)
 
     def put(self, request, pk, format=None):
         program = self.get_object(pk)
-        serializer = ProgramWriteSerializer(program, data=request.data)
+        if (request.GET.get('verbose') == 'true'):
+            serializer = ProgramVerboseSerializer(program, data=request.data)
+        else:
+            serializer = ProgramSerializer(program, data=request.data)
+
+        # serializer = ProgramSerializer(program, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)

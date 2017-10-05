@@ -28,11 +28,20 @@ class ObserverList(APIView):
     """
     def get(self, request, format=None):
         persons = Observer.objects.all()
-        serializer = ObserverReadSerializer(persons, many=True)
+        if (request.GET.get('verbose') == 'true'):
+            serializer = ObserverVerboseSerializer(persons, many=True)
+        else:
+            serializer = ObserverSerializer(persons, many=True)
+        # serializer = ObserverVerboseSerializer(persons, many=True)
         return Response(serializer.data)
 
     def post(self, request, format=None):
-        serializer = ObserverWriteSerializer(data=request.data)
+
+        if (request.GET.get('verbose') == 'true'):
+            serializer = ObserverVerboseSerializer(data=request.data)
+        else:
+            serializer = ObserverSerializer(data=request.data)
+
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -50,12 +59,21 @@ class ObserverDetail(APIView):
 
     def get(self, request, pk, format=None):
         person = self.get_object(pk)
-        serializer = ObserverReadSerializer(person)
+        if (request.GET.get('verbose') == 'true'):
+            serializer = ObserverVerboseSerializer(person)
+        else:
+            serializer = ObserverSerializer(person)
+        # serializer = ObserverReadSerializer(person)
         return Response(serializer.data)
 
     def put(self, request, pk, format=None):
         person = self.get_object(pk)
-        serializer = ObserverWriteSerializer(person, data=request.data)
+
+        if (request.GET.get('verbose') == 'true'):
+            serializer = ObserverVerboseSerializer(person, data=request.data)
+        else:
+            serializer = ObserverSerializer(person, data=request.data)
+
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
