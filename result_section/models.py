@@ -12,12 +12,12 @@ class Result(models.Model):
     started = models.CharField(max_length=50, blank=True)
     ended = models.CharField(max_length=50, blank=True)
     type = models.CharField(max_length=10, default="question")
-    # participant = models.ForeignKey(Participant)
-
-class ResultSession:
     participant = models.ForeignKey(Participant)
-    event = models.ForeignKey(Event)
-    results = models.ManyToManyField(Result)
+
+# class ResultSession:
+#     participant = models.ForeignKey(Participant)
+#     event = models.ForeignKey(Event)
+#     results = models.ManyToManyField(Result)
 
 class MediaResult(Result):
     media = models.ForeignKey(MediaIntervention, null=True, blank=True)
