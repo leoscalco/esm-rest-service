@@ -39,12 +39,12 @@ class ProgramVerboseSerializer(serializers.ModelSerializer):
 
         participants = []
         for p in participants_data:
-            participants.append(Participant.objects.create(**p))
+            participants.append(Participant.objects.get(id=p['id']))
 
         observers = []
         for o in observers_data:
             cs = o.pop('contacts')
-            observers.append(Observer.objects.create(**o))
+            observers.append(Observer.objects.get(id=p['id']))
             for i in range(len(cs)):
                 print i
                 p = Participant.objects.get(email=cs[i]['email'])

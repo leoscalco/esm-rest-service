@@ -152,9 +152,26 @@ class QuestionResultSerializer(serializers.ModelSerializer):
 class QuestionResultVerboseSerializer(serializers.ModelSerializer):
     # just id without, dict with
     # participant = ParticipantSerializer()
+    # self.question_id = serializers.IntegerField(source='question.id')
+
     question = QuestionInterventionSerializer()
 
     class Meta:
         model = QuestionResult
         fields = ('id', 'type' ,'started', 'ended',
             'answer', 'question')
+
+    def create(self, validated_data):
+        intervention = validated_data.pop('question')
+        question_id = self.data["question"]["id"]
+
+        result = QuestionResult.objects.create(
+            started=self.data["started"],
+            ended=self.data["ended"],
+            type=self.data["type"],
+            question=QuestionIntervention.objects.get(id=question_id),
+            answer=self.data["answer"]
+            )
+
+        return result
+

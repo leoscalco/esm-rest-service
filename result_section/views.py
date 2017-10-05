@@ -23,11 +23,12 @@ class ResultSessionList(APIView):
         return Response(serializer.data)
 
     def post(self, request, format=None):
+
         if (request.GET.get('verbose') == 'true'):
             serializer = ResultSessionVerboseSerializer(data=request.data)
         else:
             serializer = ResultSessionSerializer(data=request.data)
-            print "Hello"
+
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -88,19 +89,19 @@ class MediaResultDetail(APIView):
         # serializer = MediaResultReadSerializer(result)
         return Response(serializer.data)
 
-    def put(self, request, pk, format=None):
-        result = self.get_object(pk)
+    # def put(self, request, pk, format=None):
+    #     result = self.get_object(pk)
 
-        if (request.GET.get('verbose') == 'true'):
-            serializer = MediaResultVerboseSerializer(result, data=request.data)
-        else:
-            serializer = MediaResultSerializer(result, data=request.data)
+    #     if (request.GET.get('verbose') == 'true'):
+    #         serializer = MediaResultVerboseSerializer(result, data=request.data)
+    #     else:
+    #         serializer = MediaResultSerializer(result, data=request.data)
 
-        # serializer = MediaResultWriteSerializer(result, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    #     # serializer = MediaResultWriteSerializer(result, data=request.data)
+    #     if serializer.is_valid():
+    #         serializer.save()
+    #         return Response(serializer.data)
+    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk, format=None):
         result = self.get_object(pk)
@@ -151,17 +152,17 @@ class TaskResultDetail(APIView):
 
         return Response(serializer.data)
 
-    def put(self, request, pk, format=None):
-        result = self.get_object(pk)
-        if (request.GET.get('verbose') == 'true'):
-            serializer = TaskResultVerboseSerializer(result, data=request.data)
-        else:
-            serializer = TaskResultSerializer(result, data=request.data)
+    # def put(self, request, pk, format=None):
+    #     result = self.get_object(pk)
+    #     if (request.GET.get('verbose') == 'true'):
+    #         serializer = TaskResultVerboseSerializer(result, data=request.data)
+    #     else:
+    #         serializer = TaskResultSerializer(result, data=request.data)
 
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    #     if serializer.is_valid():
+    #         serializer.save()
+    #         return Response(serializer.data)
+    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk, format=None):
         result = self.get_object(pk)
@@ -212,18 +213,18 @@ class SensorResultDetail(APIView):
 
         return Response(serializer.data)
 
-    def put(self, request, pk, format=None):
-        result = self.get_object(pk)
+    # def put(self, request, pk, format=None):
+    #     result = self.get_object(pk)
 
-        if (request.GET.get('verbose') == 'true'):
-            serializer = SensorResultVerboseSerializer(result, data=request.data)
-        else:
-            serializer = SensorResultSerializer(result, data=request.data)
+    #     if (request.GET.get('verbose') == 'true'):
+    #         serializer = SensorResultVerboseSerializer(result, data=request.data)
+    #     else:
+    #         serializer = SensorResultSerializer(result, data=request.data)
 
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    #     if serializer.is_valid():
+    #         serializer.save()
+    #         return Response(serializer.data)
+    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk, format=None):
         result = self.get_object(pk)
@@ -274,17 +275,17 @@ class QuestionResultDetail(APIView):
 
         return Response(serializer.data)
 
-    def put(self, request, pk, format=None):
-        result = self.get_object(pk)
-        if (request.GET.get('verbose') == 'true'):
-            serializer = QuestionResultVerboseSerializer(result, data=request.data)
-        else:
-            serializer = QuestionResultSerializer(result, data=request.data)
+    # def put(self, request, pk, format=None):
+    #     result = self.get_object(pk)
+    #     if (request.GET.get('verbose') == 'true'):
+    #         serializer = QuestionResultVerboseSerializer(result, data=request.data)
+    #     else:
+    #         serializer = QuestionResultSerializer(result, data=request.data)
 
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    #     if serializer.is_valid():
+    #         serializer.save()
+    #         return Response(serializer.data)
+    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk, format=None):
         result = self.get_object(pk)

@@ -9,7 +9,7 @@ from intervation_section.models import EmptyIntervention, TaskIntervention, Medi
 class Event(models.Model):
     title = models.CharField(max_length=100)
     description = models.CharField(max_length=500, default="", blank=True)
-    group = models.CharField(max_length=100, blank=True)
+    group = models.CharField(max_length=100, blank=True, default="")
     type = models.CharField(max_length=50, default="active")
 
     sensors = models.ManyToManyField(Sensor, blank=True)

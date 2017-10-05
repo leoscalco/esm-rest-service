@@ -145,6 +145,12 @@ class QuestionInterventionSerializer(serializers.ModelSerializer):
             'orderPosition', 'first', 'next', 'obligatory',
             'questionType', 'options', 'conditions', 'complexConditions'
         )
+        extra_kwargs = {
+            "id": {
+                "read_only": False,
+                "required": False,
+            },
+        }
 
     def create(self, validated_data):
         medias_data = validated_data.pop('medias')

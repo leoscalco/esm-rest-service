@@ -21,7 +21,7 @@ class EventSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Event
-        fields = ('id', 'type', 'title', 'description', 'sensors'
+        fields = ('id', 'type', 'title', 'group' 'description', 'sensors'
         )
 
     def to_representation(self, obj):
