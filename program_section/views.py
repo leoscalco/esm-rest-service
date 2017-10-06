@@ -57,6 +57,7 @@ class ProgramDetail(APIView):
 
     def put(self, request, pk, format=None):
         program = self.get_object(pk)
+
         if (request.GET.get('verbose') == 'true'):
             serializer = ProgramVerboseSerializer(program, data=request.data)
         else:

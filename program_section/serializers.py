@@ -5,6 +5,7 @@ from user_section.models import *
 from event_section.models import *
 from user_section.serializers import *
 from event_section.serializers import *
+from django.db import IntegrityError, transaction
 
 class ProgramSerializer(serializers.ModelSerializer):
 
@@ -29,77 +30,129 @@ class ProgramVerboseSerializer(serializers.ModelSerializer):
         )
 
     def create(self, validated_data):
-        print validated_data
+        try:
+            with transaction.atomic():
 
-        participants_data = validated_data.pop('participants')
-        observers_data = validated_data.pop('observers')
-        events_data = validated_data.pop('events')
+                participants_data = validated_data.pop('participants')
+                observers_data = validated_data.pop('observers')
+                events_data = validated_data.pop('events')
 
-        participants = []
-        for p in participants_data:
-            participants.append(Participant.objects.get(id=p['id']))
+                participants = []
+                for p in participants_data:
+                    participants.append(
+                        Participant.objects.create(
+                            name=p['name'], email=p['email'])
+                        )
 
-        observers = []
-        for o in observers_data:
-            cs = o.pop('contacts')
-            print o
-            observers.append(Observer.objects.get(id=o['id']))
-            for c in cs:
-                print c
-                p = Participant.objects.get(id=c['id'])
-                observers[-1].contacts.add(p)
-            observers[-1].save()
+                observers = []
+                for o in observers_data:
+                    cs = o.pop('contacts')
 
-        events = []
-        for e in events_data:
-            if e['type'] == "active":
-                aes = ActiveEventVerboseSerializer()
-                # if serializer.is_valid():
-                #     serializer.save()
-                aes.saving_data(e)
-                events.append(Event.objects.all().latest('id'))
+                    observers.append(Observer.objects.create(
+                        role=o['role'], name=o['name'], email=o['email']
+                        ))
+                    for c in cs:
+                        if Participant.objects.filter(email=c['email']).exists():
+                            p = Participant.objects.get(email=c['email'])
+                        else:
+                            p = Participant.objects.create(
+                                name=c['name'], email=c['email']
+                                )
+                        observers[-1].contacts.add(p)
+                    observers[-1].save()
 
-        program = Program.objects.create(
-            **validated_data
-            )
+                events = []
+                for e in events_data:
+                    if e['type'] == "active":
+                        aes = ActiveEventVerboseSerializer()
+                        # if serializer.is_valid():
+                        #     serializer.save()
+                        # aes.saving_data(e)
+                        z = aes.saving_data(e)
+                        events.append(z)
 
-        for p in participants:
-            program.participants.add(p)
+                program = Program.objects.create(
+                    **validated_data
+                    )
 
-        for o in observers:
-            program.observers.add(o)
+                for p in participants:
+                    program.participants.add(p)
 
-        for e in events:
-            program.events.add(e)
+                for o in observers:
+                    program.observers.add(o)
 
-        program.save()
+                for e in events:
+                    program.events.add(e)
 
-        return program
+                program.save()
+
+                return program
+        except IntegrityError:
+            return "Error"
 
     def update(self, instance, validated_data):
-        instance.title = validated_data.get('title', instance.title)
-        instance.description = validated_data.get('description', instance.description)
-        instance.starts = validated_data.get('starts', instance.starts)
-        instance.ends = validated_data.get('ends', instance.ends)
-        instance.updateDate = validated_data.get('updateDate', instance.updateDate)
-        instance.save()
+        try:
+            with transaction.atomic():
+                instance.title = validated_data.get('title', instance.title)
+                instance.description = validated_data.get('description', instance.description)
+                instance.starts = validated_data.get('starts', instance.starts)
+                instance.ends = validated_data.get('ends', instance.ends)
+                instance.updateDate = validated_data.get('updateDate', instance.updateDate)
+                instance.save()
 
-        participants_data = validated_data.pop('participants')
-        observers_data = validated_data.pop('observers')
-        events_data = validated_data.pop('events')
+                participants_data = validated_data.pop('participants')
+                observers_data = validated_data.pop('observers')
+                events_data = validated_data.pop('events')
 
-        # for participant in participants_data:
-        #     p = Participant.objects.create(
-        #         **participant
-        #     )
-        #     instance.triggers.add(t)
+                participants = []
+                for p in participants_data:
+                    participants.append(
+                        Participant.objects.create(
+                            name=p['name'], email=p['email'])
+                        )
 
-        for event in events_data:
-            if event['type'] == "active":
-                aes = ActiveEventVerboseSerializer()
-                aes.saving_data(event)
-                instance.events.add(Event.objects.all().latest('id'))
+                observers = []
+                for o in observers_data:
+                    cs = o.pop('contacts')
 
-        instance.save()
+                    observers.append(Observer.objects.create(
+                        role=o['role'], name=o['name'], email=o['email']
+                        ))
+                    for c in cs:
+                        if Participant.objects.filter(email=c['email']).exists():
+                            p = Participant.objects.get(email=c['email'])
+                        else:
+                            p = Participant.objects.create(
+                                name=c['name'], email=c['email']
+                                )
+                        observers[-1].contacts.add(p)
+                    observers[-1].save()
 
-        return instance
+                for p in participants:
+                    instance.participants.add(p)
+
+                for o in observers:
+                    instance.observers.add(o)
+
+                # for participant in participants_data:
+                #     ps = ParticipantSerializer()
+                #     # ps = ParticipantSerializer.create(
+                #     #     participant
+                #     # )
+                #     instance.participants.add(ps.create(participant))
+
+                # for observer in observers_data:
+                #     os = ObserverVerboseSerializer()
+                #     instance.observers.add(os.create(observer))
+
+                for event in events_data:
+                    if event['type'] == "active":
+                        aes = ActiveEventVerboseSerializer()
+                        # aes.saving_data(event)
+                        instance.events.add(aes.saving_data(event))
+
+                instance.save()
+
+                return instance
+        except IntegrityError:
+            return "Error"

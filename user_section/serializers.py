@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User, Group
 from rest_framework import serializers
 from models import Observer, Participant, Person
+from django.db import IntegrityError, transaction
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -44,59 +45,69 @@ class ObserverVerboseSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         # contacts_data = validated_data.get('contacts')
-        if (len(Observer.objects.all()) == 0):
-            validated_data['id'] = 1
-        else:
-            validated_data['id'] = Observer.objects.all().latest('id').id
+        try:
+            with transaction.atomic():
+                if (len(Observer.objects.all()) == 0):
+                    validated_data['id'] = 1
+                else:
+                    validated_data['id'] = Observer.objects.all().latest('id').id
 
-        contacts_data = validated_data.pop('contacts')
+                contacts_data = validated_data.pop('contacts')
 
-        participants = []
-        for contact in contacts_data:
-            # contact['email'] = "forc@email.com"
-            participants.append(Participant.objects.create(**contact))
+                participants = []
+                for contact in contacts_data:
+                    # contact['email'] = "forc@email.com"
+                    participants.append(Participant.objects.create(name=contact['name'],
+                        email=contact['email']))
 
-        print participants
-        # validated_data['contacts'] = participants
+                # validated_data['contacts'] = participants
 
-        observer = Observer.objects.create(
-            **validated_data
-            )
+                observer = Observer.objects.create(
+                    name=validated_data['name'],
+                    email=validated_data['email'],
+                    role=validated_data['role']
+                    )
 
-        for p in participants:
-            observer.contacts.add(p)
+                for p in participants:
+                    observer.contacts.add(p)
 
-        observer.save()
+                observer.save()
 
-        return observer
+                return observer
+
+        except IntegrityError:
+            return "Error"
 
     def update(self, instance, validated_data):
         # print validated_data
+        try:
+            with transaction.atomic():
+                instance.name = validated_data.get('name', instance.name)
+                instance.email = validated_data.get('email', instance.email)
+                instance.role = validated_data.get('role', instance.role)
 
-        instance.name = validated_data.get('name', instance.name)
-        instance.email = validated_data.get('email', instance.email)
-        instance.role = validated_data.get('role', instance.role)
+                if 'contacts' in validated_data:
+                    contacts_data = validated_data.pop('contacts')
+                    for contact in contacts_data:
+                        if 'id' in contact:
+                            p = Participant.objects.get(
+                                id=contact['id']
+                            )
+                            p.name = contact['name'],
+                            p.email = contact['email']
+                            p.save()
+                        else:
+                            p = Participant.objects.create(
+                                name=contact['name'], email=contact['email']
+                            )
+                            p.save()
+                        instance.contacts.add(p)
 
-        if 'contacts' in validated_data:
-            contacts_data = validated_data.pop('contacts')
-            for contact in contacts_data:
-                # if 'id' in contact:
-                #     p = Participant.objects.get(
-                #         id=contact['id']
-                #     )
-                #     p.name = contact['name'],
-                #     p.email = contact['email']
-                #     p.save()
-                # else:
-                p = Participant.objects.create(
-                    **contact
-                )
-                p.save()
-                instance.contacts.add(p)
+                instance.save()
 
-        instance.save()
-
-        return instance
+                return instance
+        except IntegrityError:
+            return "Error"
 
 class ParticipantSerializer(serializers.ModelSerializer):
     # contacts = ContactsSerializer(many=False)

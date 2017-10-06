@@ -82,7 +82,6 @@ class EmptyInterventionSerializer(serializers.ModelSerializer):
             validated_data['id'] = Intervention.objects.all().latest('id').id + 1
 
         medias_data = validated_data.pop('medias')
-        validated_data['id'] += 1
         arr = []
         for media_data in medias_data:
             if (len(MediaPresentation.objects.all()) == 0):
@@ -183,8 +182,7 @@ class QuestionInterventionSerializer(serializers.ModelSerializer):
     class Meta:
         model = QuestionIntervention
         fields = ('id', 'type', 'statement', 'medias',
-            'orderPosition', 'first', 'next', 'obligatory',
-            'questionType', 'options', 'conditions', 'complexConditions'
+            'orderPosition', 'first', 'next', 'obligatory', 'questionType', 'options', 'conditions', 'complexConditions'
         )
         extra_kwargs = {
             "id": {
@@ -199,8 +197,13 @@ class QuestionInterventionSerializer(serializers.ModelSerializer):
         else:
             validated_data['id'] = Intervention.objects.all().latest('id').id + 1
 
+        print "hhhhhh:"
+        print validated_data
+
         medias_data = validated_data.pop('medias')
         complex_cond_data = validated_data.pop('complexConditions')
+        # validated_data['next'] = validated_data['next']
+        print complex_cond_data
         # cond_data = validated_data.pop('conditions')
         # options_data = validated_data.pop('options')
 
