@@ -65,9 +65,9 @@ class ActiveEventDetail(APIView):
         event = self.get_object(pk)
 
         if (request.GET.get('verbose') == 'true'):
-            serializer = ActiveEventVerboseSerializer(data=request.data)
+            serializer = ActiveEventVerboseSerializer(event, data=request.data)
         else:
-            serializer = ActiveEventSerializer(data=request.data)
+            serializer = ActiveEventSerializer(event, data=request.data)
 
         if serializer.is_valid():
             serializer.save()

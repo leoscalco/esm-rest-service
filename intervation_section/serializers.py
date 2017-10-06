@@ -7,6 +7,7 @@ class MediaPresentationSerializer(serializers.ModelSerializer):
         model = MediaPresentation
         fields = ('id', 'type', 'mediaUrl')
 
+
 class ComplexConditionSerializer(serializers.ModelSerializer):
     # contacts = ObserverContactsSerializer(many=True)
 
@@ -75,9 +76,19 @@ class EmptyInterventionSerializer(serializers.ModelSerializer):
         )
 
     def create(self, validated_data):
+        if (len(Intervention.objects.all()) == 0):
+            validated_data['id'] = 1
+        else:
+            validated_data['id'] = Intervention.objects.all().latest('id').id + 1
+
         medias_data = validated_data.pop('medias')
+        validated_data['id'] += 1
         arr = []
         for media_data in medias_data:
+            if (len(MediaPresentation.objects.all()) == 0):
+                media_data['id'] = 1
+            else:
+                media_data['id'] = MediaPresentation.objects.all().latest('id').id + 1
             n = MediaPresentation.objects.create(**media_data)
             arr.append(n.id)
         # validated_data['medias'] = arr
@@ -96,11 +107,26 @@ class TaskInterventionSerializer(serializers.ModelSerializer):
             'orderPosition', 'first', 'next', 'obligatory',
             'appPackage'
         )
+        extra_kwargs = {
+            "id": {
+                "read_only": False,
+                "required": False,
+            },
+        }
 
     def create(self, validated_data):
+        if (len(Intervention.objects.all()) == 0):
+            validated_data['id'] = 1
+        else:
+            validated_data['id'] = Intervention.objects.all().latest('id').id + 1
+
         medias_data = validated_data.pop('medias')
         arr = []
         for media_data in medias_data:
+            if (len(MediaPresentation.objects.all()) == 0):
+                media_data['id'] = 1
+            else:
+                media_data['id'] = MediaPresentation.objects.all().latest('id').id + 1
             n = MediaPresentation.objects.create(**media_data)
             arr.append(n.id)
         # validated_data['medias'] = arr
@@ -119,11 +145,26 @@ class MediaInterventionSerializer(serializers.ModelSerializer):
             'orderPosition', 'first', 'next', 'obligatory',
             'mediaType'
         )
+        extra_kwargs = {
+            "id": {
+                "read_only": False,
+                "required": False,
+            },
+        }
 
     def create(self, validated_data):
+        if (len(Intervention.objects.all()) == 0):
+            validated_data['id'] = 1
+        else:
+            validated_data['id'] = Intervention.objects.all().latest('id').id + 1
+
         medias_data = validated_data.pop('medias')
         arr = []
         for media_data in medias_data:
+            if (len(MediaPresentation.objects.all()) == 0):
+                media_data['id'] = 1
+            else:
+                media_data['id'] = MediaPresentation.objects.all().latest('id').id + 1
             n = MediaPresentation.objects.create(**media_data)
             arr.append(n.id)
         # validated_data['medias'] = arr
@@ -153,6 +194,11 @@ class QuestionInterventionSerializer(serializers.ModelSerializer):
         }
 
     def create(self, validated_data):
+        if (len(Intervention.objects.all()) == 0):
+            validated_data['id'] = 1
+        else:
+            validated_data['id'] = Intervention.objects.all().latest('id').id + 1
+
         medias_data = validated_data.pop('medias')
         complex_cond_data = validated_data.pop('complexConditions')
         # cond_data = validated_data.pop('conditions')
@@ -166,6 +212,10 @@ class QuestionInterventionSerializer(serializers.ModelSerializer):
         intervention = QuestionIntervention.objects.create(**validated_data)
 
         for media_data in medias_data:
+            if (len(MediaPresentation.objects.all()) == 0):
+                media_data['id'] = 1
+            else:
+                media_data['id'] = MediaPresentation.objects.all().latest('id').id + 1
             n = MediaPresentation.objects.create(**media_data)
             arr_medias.append(n.id)
 

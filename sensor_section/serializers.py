@@ -10,6 +10,22 @@ class SensorSerializer(serializers.ModelSerializer):
         fields = ('id', 'sensorType', 'sensor', 'SENSOR_TYPE_INTERVAL',
             'SENSOR_TYPE_TASK'
             )
+        extra_kwargs = {
+            "id": {
+                "read_only": False,
+                "required": False,
+            },
+        }
+
+    def create(self, validated_data):
+        if len(Sensor.objects.all()) == 0:
+            validated_data['id'] = 1
+        else:
+            validated_data['id'] = (Sensor.objects.all().latest('id').id) + 1
+
+        p = Sensor.objects.create(**validated_data)
+
+        return p
 
     # id = serializers.IntegerField(read_only=True)
     # name = serializers.CharField(max_length=200)

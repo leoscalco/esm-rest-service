@@ -39,7 +39,11 @@ class ResultsList(APIView):
 
     def get(self, request, format=None):
         results = Result.objects.all()
-        serializer = ResultsSerializer(results, many=True)
+        if (request.GET.get('verbose') == 'true'):
+            serializer = ResultsVerboseSerializer(results, many=True)
+        else:
+            serializer = ResultsSerializer(results, many=True)
+
         return Response(serializer.data)
 
 class MediaResultList(APIView):

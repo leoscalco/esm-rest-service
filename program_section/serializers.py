@@ -34,8 +34,6 @@ class ProgramVerboseSerializer(serializers.ModelSerializer):
         participants_data = validated_data.pop('participants')
         observers_data = validated_data.pop('observers')
         events_data = validated_data.pop('events')
-        print "   - - - - - "
-        print events_data
 
         participants = []
         for p in participants_data:
@@ -44,18 +42,18 @@ class ProgramVerboseSerializer(serializers.ModelSerializer):
         observers = []
         for o in observers_data:
             cs = o.pop('contacts')
-            observers.append(Observer.objects.get(id=p['id']))
-            for i in range(len(cs)):
-                print i
-                p = Participant.objects.get(email=cs[i]['email'])
-                print p
+            print o
+            observers.append(Observer.objects.get(id=o['id']))
+            for c in cs:
+                print c
+                p = Participant.objects.get(id=c['id'])
                 observers[-1].contacts.add(p)
             observers[-1].save()
 
         events = []
         for e in events_data:
             if e['type'] == "active":
-                aes = ActiveEventReadSerializer()
+                aes = ActiveEventVerboseSerializer()
                 # if serializer.is_valid():
                 #     serializer.save()
                 aes.saving_data(e)
@@ -77,3 +75,31 @@ class ProgramVerboseSerializer(serializers.ModelSerializer):
         program.save()
 
         return program
+
+    def update(self, instance, validated_data):
+        instance.title = validated_data.get('title', instance.title)
+        instance.description = validated_data.get('description', instance.description)
+        instance.starts = validated_data.get('starts', instance.starts)
+        instance.ends = validated_data.get('ends', instance.ends)
+        instance.updateDate = validated_data.get('updateDate', instance.updateDate)
+        instance.save()
+
+        participants_data = validated_data.pop('participants')
+        observers_data = validated_data.pop('observers')
+        events_data = validated_data.pop('events')
+
+        # for participant in participants_data:
+        #     p = Participant.objects.create(
+        #         **participant
+        #     )
+        #     instance.triggers.add(t)
+
+        for event in events_data:
+            if event['type'] == "active":
+                aes = ActiveEventVerboseSerializer()
+                aes.saving_data(event)
+                instance.events.add(Event.objects.all().latest('id'))
+
+        instance.save()
+
+        return instance

@@ -16,6 +16,12 @@ class ObserverContactsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Participant
         fields = ('id', 'name', 'email')
+        extra_kwargs = {
+            "id": {
+                "read_only": False,
+                "required": False,
+            },
+        }
 
 class ObserverSerializer(serializers.ModelSerializer):
 
@@ -29,10 +35,22 @@ class ObserverVerboseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Observer
         fields = ('id', 'name', 'email', 'role', 'contacts')
+        extra_kwargs = {
+            "id": {
+                "read_only": False,
+                "required": False,
+            },
+        }
 
     def create(self, validated_data):
         # contacts_data = validated_data.get('contacts')
+        if (len(Observer.objects.all()) == 0):
+            validated_data['id'] = 1
+        else:
+            validated_data['id'] = Observer.objects.all().latest('id').id + 1
+
         contacts_data = validated_data.pop('contacts')
+
         participants = []
         for contact in contacts_data:
             # contact['email'] = "forc@email.com"
@@ -59,13 +77,22 @@ class ObserverVerboseSerializer(serializers.ModelSerializer):
         instance.email = validated_data.get('email', instance.email)
         instance.role = validated_data.get('role', instance.role)
 
-        contacts_data = validated_data.pop('contacts')
-
-        for i in range(len(contacts_data)):
-            p = Participant.objects.get(email=instance.contacts.all()[i].email)
-            p.name = contacts_data[i]['name']
-            p.email = contacts_data[i]['email']
-            p.save()
+        if 'contacts' in validated_data:
+            contacts_data = validated_data.pop('contacts')
+            for contact in contacts_data:
+                # if 'id' in contact:
+                #     p = Participant.objects.get(
+                #         id=contact['id']
+                #     )
+                #     p.name = contact['name'],
+                #     p.email = contact['email']
+                #     p.save()
+                # else:
+                p = Participant.objects.create(
+                    **contact
+                )
+                p.save()
+                instance.contacts.add(p)
 
         instance.save()
 
@@ -79,6 +106,24 @@ class ParticipantSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'email',
             # 'observerResponsible'
             )
+        extra_kwargs = {
+            "id": {
+                "read_only": False,
+                "required": False,
+            },
+        }
+
+    def create(self, validated_data):
+        if (len(Participant.objects.all()) == 0):
+            validated_data['id'] = 1
+        else:
+            validated_data['id'] = Participant.objects.all().latest('id').id + 1
+
+        p = Participant.objects.create(**validated_data)
+
+        return p
+
+
     # id = serializers.IntegerField(read_only=True)
     # name = serializers.CharField(max_length=200)
     # email = serializers.EmailField(required=True)
