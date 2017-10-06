@@ -47,7 +47,7 @@ class ObserverVerboseSerializer(serializers.ModelSerializer):
         if (len(Observer.objects.all()) == 0):
             validated_data['id'] = 1
         else:
-            validated_data['id'] = Observer.objects.all().latest('id').id + 1
+            validated_data['id'] = Observer.objects.all().latest('id').id
 
         contacts_data = validated_data.pop('contacts')
 
@@ -117,7 +117,7 @@ class ParticipantSerializer(serializers.ModelSerializer):
         if (len(Participant.objects.all()) == 0):
             validated_data['id'] = 1
         else:
-            validated_data['id'] = Participant.objects.all().latest('id').id + 1
+            validated_data['id'] = Participant.objects.all().latest('id').id
 
         p = Participant.objects.create(**validated_data)
 

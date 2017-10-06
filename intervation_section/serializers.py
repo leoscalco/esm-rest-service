@@ -79,7 +79,7 @@ class EmptyInterventionSerializer(serializers.ModelSerializer):
         if (len(Intervention.objects.all()) == 0):
             validated_data['id'] = 1
         else:
-            validated_data['id'] = Intervention.objects.all().latest('id').id + 1
+            validated_data['id'] = Intervention.objects.all().latest('id').id
 
         medias_data = validated_data.pop('medias')
         validated_data['id'] += 1
@@ -88,7 +88,7 @@ class EmptyInterventionSerializer(serializers.ModelSerializer):
             if (len(MediaPresentation.objects.all()) == 0):
                 media_data['id'] = 1
             else:
-                media_data['id'] = MediaPresentation.objects.all().latest('id').id + 1
+                media_data['id'] = MediaPresentation.objects.all().latest('id').id
             n = MediaPresentation.objects.create(**media_data)
             arr.append(n.id)
         # validated_data['medias'] = arr
@@ -118,7 +118,7 @@ class TaskInterventionSerializer(serializers.ModelSerializer):
         if (len(Intervention.objects.all()) == 0):
             validated_data['id'] = 1
         else:
-            validated_data['id'] = Intervention.objects.all().latest('id').id + 1
+            validated_data['id'] = Intervention.objects.all().latest('id').id
 
         medias_data = validated_data.pop('medias')
         arr = []
@@ -126,7 +126,7 @@ class TaskInterventionSerializer(serializers.ModelSerializer):
             if (len(MediaPresentation.objects.all()) == 0):
                 media_data['id'] = 1
             else:
-                media_data['id'] = MediaPresentation.objects.all().latest('id').id + 1
+                media_data['id'] = MediaPresentation.objects.all().latest('id').id
             n = MediaPresentation.objects.create(**media_data)
             arr.append(n.id)
         # validated_data['medias'] = arr
@@ -156,7 +156,7 @@ class MediaInterventionSerializer(serializers.ModelSerializer):
         if (len(Intervention.objects.all()) == 0):
             validated_data['id'] = 1
         else:
-            validated_data['id'] = Intervention.objects.all().latest('id').id + 1
+            validated_data['id'] = Intervention.objects.all().latest('id').id
 
         medias_data = validated_data.pop('medias')
         arr = []
@@ -164,7 +164,7 @@ class MediaInterventionSerializer(serializers.ModelSerializer):
             if (len(MediaPresentation.objects.all()) == 0):
                 media_data['id'] = 1
             else:
-                media_data['id'] = MediaPresentation.objects.all().latest('id').id + 1
+                media_data['id'] = MediaPresentation.objects.all().latest('id').id
             n = MediaPresentation.objects.create(**media_data)
             arr.append(n.id)
         # validated_data['medias'] = arr
@@ -197,7 +197,7 @@ class QuestionInterventionSerializer(serializers.ModelSerializer):
         if (len(Intervention.objects.all()) == 0):
             validated_data['id'] = 1
         else:
-            validated_data['id'] = Intervention.objects.all().latest('id').id + 1
+            validated_data['id'] = Intervention.objects.all().latest('id').id
 
         medias_data = validated_data.pop('medias')
         complex_cond_data = validated_data.pop('complexConditions')
@@ -215,7 +215,7 @@ class QuestionInterventionSerializer(serializers.ModelSerializer):
             if (len(MediaPresentation.objects.all()) == 0):
                 media_data['id'] = 1
             else:
-                media_data['id'] = MediaPresentation.objects.all().latest('id').id + 1
+                media_data['id'] = MediaPresentation.objects.all().latest('id').id
             n = MediaPresentation.objects.create(**media_data)
             arr_medias.append(n.id)
 

@@ -162,7 +162,7 @@ class ActiveEventVerboseSerializer(serializers.ModelSerializer):
         if (len(Event.objects.all()) == 0):
             validated_data['id'] = 1
         else:
-            validated_data['id'] = Event.objects.all().latest('id').id + 1
+            validated_data['id'] = Event.objects.all().latest('id').id
 
         interventions_data = validated_data.pop('interventions')
         triggers_data = validated_data.pop('triggers')

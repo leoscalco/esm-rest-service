@@ -21,7 +21,7 @@ class EventTriggerSerializer(serializers.ModelSerializer):
         if len(EventTrigger.objects.all()) == 0:
             validated_data['id'] = 1
         else:
-            validated_data['id'] = (EventTrigger.objects.all().latest('id').id) + 1
+            validated_data['id'] = (EventTrigger.objects.all().latest('id').id)
 
         p = EventTrigger.objects.create(**validated_data)
 
