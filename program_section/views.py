@@ -83,7 +83,21 @@ class ProgramsByEmail(APIView):
             if not len(queryset):
                 return Response({"error":"Observer without programs."}, status=status.HTTP_404_NOT_FOUND)
             else:
-                serializer = ProgramReadSerializer(queryset, many=True)
+                serializer = ProgramVerboseSerializer(queryset, many=True)
+                return Response(serializer.data)
+        except Program.DoesNotExist:
+            return Response({"error":"E-mail not found."}, status=status.HTTP_404_NOT_FOUND)
+
+class ProgramsByParticipantEmail(APIView):
+
+    def get(self, request, format=None):
+        participant = Participant.objects.get(email=request.GET.get('email'))
+        try:
+            queryset = Program.objects.filter(participants__id=participant.id)
+            if not len(queryset):
+                return Response({"error":"Participant without programs."}, status=status.HTTP_404_NOT_FOUND)
+            else:
+                serializer = ProgramVerboseSerializer(queryset, many=True)
                 return Response(serializer.data)
         except Program.DoesNotExist:
             return Response({"error":"E-mail not found."}, status=status.HTTP_404_NOT_FOUND)
