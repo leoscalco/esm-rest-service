@@ -30,27 +30,32 @@ class ResultsVerboseSerializer(serializers.ModelSerializer):
         """
         Because Results is Polymorphic
         """
-        if obj['type'] == "sensor":
+        # print "OBJETO"
+        # print obj
+
+        if obj['type'] == 'sensor':
+            # if obj['type'] == 'sensor'
             # self.fields += ()
-            obj = SensorResult.objects.get(id=obj['id'])
-            return SensorResultVerboseSerializer(obj, context=self.context).to_representation(obj)
-        elif obj['type'] == "question":
-            obj = QuestionResult.objects.get(id=obj['id'])
-            return QuestionResultVerboseSerializer(obj, context=self.context).to_representation(obj)
-        elif obj['type'] == "task":
-            obj = TaskResult.objects.get(id=obj['id'])
-            return TaskResultVerboseSerializer(obj, context=self.context).to_representation(obj)
-        elif obj['type'] == "media":
-            obj = MediaResult.objects.get(id=obj['id'])
-            return MediaResultVerboseSerializer(context=self.context).to_representation(obj)
+            # obj = SensorResult.objects.get(id=obj['sensor'])
+            return SensorResultVerboseSerializer(context=self.context).to_internal_value(obj)
+        elif obj['type'] == 'question':
+            # obj = QuestionResult.objects.get(id=obj['question'])
+            return QuestionResultVerboseSerializer(context=self.context).to_internal_value(obj)
+        elif obj['type'] == 'task':
+            # obj = TaskResult.objects.get(id=obj['id'])
+            return TaskResultVerboseSerializer(context=self.context).to_internal_value(obj)
+        elif obj['type'] == 'media':
+            # obj = MediaResult.objects.get(id=obj['media'])
+            return MediaResultVerboseSerializer(context=self.context).to_internal_value(obj)
         else:
-            return super(ResultsSerializer, self).to_representation(obj)
+            return super(ResultsSerializer, self).to_internal_value(obj)
 
 
     def to_representation(self, obj):
         """
         Because Results is Polymorphic
         """
+        print "OLA"
         if isinstance(obj, Result):
             if obj.type == "sensor":
                 obj = SensorResult.objects.get(id=obj.id)
@@ -112,8 +117,6 @@ class ResultsSerializer(serializers.ModelSerializer):
 
 class ResultSessionVerboseSerializer(serializers.ModelSerializer):
 
-    participant = ParticipantSerializer()
-    event = EventVerboseSerializer()
     results = ResultsVerboseSerializer(many=True)
 
     class Meta:
@@ -125,15 +128,15 @@ class ResultSessionVerboseSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
 
-        participant = validated_data.pop('participant')
-        event = validated_data.pop('event')
-        event_id = event['id']
-        event = Event.objects.get(id=event_id)
-
+        # print validated_data['event']
+        # participant = validated_data.pop('participant')
+        # event = validated_data.pop('event')
+        print validated_data
         results_data = validated_data.pop('results')
 
         results = []
         for r in results_data:
+            # if r['type'] == "media":
             if r['type'] == "media":
                 new = MediaResultVerboseSerializer()
             if r['type'] == "question":
@@ -148,8 +151,8 @@ class ResultSessionVerboseSerializer(serializers.ModelSerializer):
         result_session = ResultSession.objects.create(
             started=validated_data['started'],
             ended=validated_data['ended'],
-            event=event,
-            participant= Participant.objects.get(id=participant['id'])
+            event=Event.objects.get(id=validated_data['event'].id),
+            participant= Participant.objects.get(id=validated_data['participant'].id)
             )
 
         for r in results:
@@ -170,7 +173,7 @@ class MediaResultSerializer(serializers.ModelSerializer):
 class MediaResultVerboseSerializer(serializers.ModelSerializer):
     # just id without, dict with
     # participant = ParticipantSerializer()
-    media = MediaInterventionSerializer()
+    # media = MediaInterventionSerializer()
 
     class Meta:
         model = MediaResult
@@ -178,14 +181,14 @@ class MediaResultVerboseSerializer(serializers.ModelSerializer):
             'urlForDataFile', 'media')
 
     def create(self, validated_data):
-        intervention = validated_data.pop('media')
-        media_id = intervention["id"]
+        # intervention = validated_data.pop('media')
+        # media_id = intervention["id"]
 
         result = MediaResult.objects.create(
             started=self.data["started"],
             ended=self.data["ended"],
             type=self.data["type"],
-            media=MediaIntervention.objects.get(id=media_id),
+            media=MediaIntervention.objects.get(id=validated_data['media'].id),
             urlForDataFile=self.data["urlForDataFile"]
             )
 
@@ -204,7 +207,7 @@ class SensorResultSerializer(serializers.ModelSerializer):
 class SensorResultVerboseSerializer(serializers.ModelSerializer):
     # just id without, dict with
     # participant = ParticipantSerializer()
-    sensor = SensorSerializer()
+    # sensor = SensorSerializer()
 
     class Meta:
         model = SensorResult
@@ -212,14 +215,14 @@ class SensorResultVerboseSerializer(serializers.ModelSerializer):
             'urlForDataFile', 'sensor')
 
     def create(self, validated_data):
-        intervention = validated_data.pop('sensor')
-        sensor_id = intervention["id"]
+        # intervention = validated_data.pop('sensor')
+        # sensor_id = intervention["id"]
 
         result = SensorResult.objects.create(
             started=self.data["started"],
             ended=self.data["ended"],
             type=self.data["type"],
-            sensor=Sensor.objects.get(id=sensor_id),
+            sensor=Sensor.objects.get(id=validated_data['sensor'].id),
             urlForDataFile=self.data["urlForDataFile"]
             )
 
@@ -238,7 +241,7 @@ class TaskResultSerializer(serializers.ModelSerializer):
 class TaskResultVerboseSerializer(serializers.ModelSerializer):
     # just id without, dict with
     # participant = ParticipantSerializer()
-    task = TaskInterventionSerializer()
+    # task = TaskInterventionSerializer()
 
     class Meta:
         model = TaskResult
@@ -246,14 +249,16 @@ class TaskResultVerboseSerializer(serializers.ModelSerializer):
             'urlForDataFile', 'task')
 
     def create(self, validated_data):
-        intervention = validated_data.pop('task')
-        task_id = intervention["id"]
+        # intervention = validated_data.pop('task')
+        # task_id = intervention["id"]
+        # print validated_data
+        # print validated_data['task']
 
         result = TaskResult.objects.create(
             started=self.data["started"],
             ended=self.data["ended"],
             type=self.data["type"],
-            task=TaskIntervention.objects.get(id=task_id),
+            task=TaskIntervention.objects.get(id=validated_data['task'].id),
             urlForDataFile=self.data["urlForDataFile"]
             )
 
@@ -274,7 +279,7 @@ class QuestionResultVerboseSerializer(serializers.ModelSerializer):
     # participant = ParticipantSerializer()
     # self.question_id = serializers.IntegerField(source='question.id')
 
-    question = QuestionInterventionSerializer()
+    # question = QuestionInterventionSerializer()
 
     class Meta:
         model = QuestionResult
@@ -282,14 +287,14 @@ class QuestionResultVerboseSerializer(serializers.ModelSerializer):
             'answer', 'question')
 
     def create(self, validated_data):
-        intervention = validated_data.pop('question')
-        question_id = intervention["id"]
+        # intervention = validated_data.pop('question')
+        # question_id = intervention["id"]
 
         result = QuestionResult.objects.create(
             started=self.data["started"],
             ended=self.data["ended"],
             type=self.data["type"],
-            question=QuestionIntervention.objects.get(id=question_id),
+            question=QuestionIntervention.objects.get(id=validated_data['question'].id),
             answer=self.data["answer"]
             )
 
