@@ -152,6 +152,11 @@ class ActiveEventVerboseSerializer(serializers.ModelSerializer):
             return "IntegrityError"
 
     def saving_data(self, validated_data):
+        # print validated_data
+        # print "-----"
+        # # print self.data
+
+        # print "calma 111"
         try:
             with transaction.atomic():
                 if (len(Event.objects.all()) == 0):

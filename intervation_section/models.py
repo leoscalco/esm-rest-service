@@ -90,7 +90,8 @@ class QuestionIntervention(Intervention):
     )
     conditions = JSONField(blank=True, null=True)
     options = JSONField(blank=True, null=True)
-    complexConditions = models.ManyToManyField(ComplexCondition)
+    complexConditions = JSONField(blank=True, null=True)
+    # complexConditions = models.ManyToManyField(ComplexCondition, blank=True)
 
     def __init__(self, *args, **kwargs):
         kwargs['type'] = "question"

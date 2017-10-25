@@ -46,6 +46,31 @@ class InterventionSerializer(serializers.ModelSerializer):
             'orderPosition', 'first', 'next', 'obligatory'
         )
 
+    def to_internal_value(self, obj):
+        """
+        Because Results is Polymorphic
+        """
+        print "OBJETO"
+        print obj
+
+
+        if obj['type'] == 'empty':
+            # if obj['type'] == 'sensor'
+            # self.fields += ()
+            # obj = SensorResult.objects.get(id=obj['sensor'])
+            return EmptyInterventionSerializer(context=self.context).to_internal_value(obj)
+        elif obj['type'] == 'question':
+            # obj = QuestionResult.objects.get(id=obj['question'])
+            return QuestionInterventionSerializer(context=self.context).to_internal_value(obj)
+        elif obj['type'] == 'task':
+            # obj = TaskResult.objects.get(id=obj['id'])
+            return TaskInterventionSerializer(context=self.context).to_internal_value(obj)
+        elif obj['type'] == 'media':
+            # obj = MediaResult.objects.get(id=obj['media'])
+            return MediaInterventionSerializer(context=self.context).to_internal_value(obj)
+        else:
+            return super(ResultsSerializer, self).to_internal_value(obj)
+
     def to_representation(self, obj):
         """
         Because GalleryItem is Polymorphic
