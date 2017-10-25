@@ -197,9 +197,6 @@ class QuestionInterventionSerializer(serializers.ModelSerializer):
         else:
             validated_data['id'] = Intervention.objects.all().latest('id').id + 1
 
-        print "hhhhhh:"
-        print validated_data
-
         medias_data = validated_data.pop('medias')
         complex_cond_data = validated_data.pop('complexConditions')
         # validated_data['next'] = validated_data['next']

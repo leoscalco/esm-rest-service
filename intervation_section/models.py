@@ -35,7 +35,7 @@ class Intervention(models.Model):
     medias = models.ManyToManyField(MediaPresentation)
     orderPosition = models.IntegerField()
     first = models.BooleanField(default=False)
-    next = models.CharField(default="1", max_length=50)
+    next = models.IntegerField()
     obligatory = models.BooleanField(default=False)
 
 class EmptyIntervention(Intervention):
