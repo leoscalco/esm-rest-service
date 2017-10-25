@@ -55,7 +55,6 @@ class ResultsVerboseSerializer(serializers.ModelSerializer):
         """
         Because Results is Polymorphic
         """
-        print "OLA"
         if isinstance(obj, Result):
             if obj.type == "sensor":
                 obj = SensorResult.objects.get(id=obj.id)
@@ -185,11 +184,11 @@ class MediaResultVerboseSerializer(serializers.ModelSerializer):
         # media_id = intervention["id"]
 
         result = MediaResult.objects.create(
-            started=self.data["started"],
-            ended=self.data["ended"],
-            type=self.data["type"],
+            started=validated_data["started"],
+            ended=validated_data["ended"],
+            type=validated_data["type"],
             media=MediaIntervention.objects.get(id=validated_data['media'].id),
-            urlForDataFile=self.data["urlForDataFile"]
+            urlForDataFile=validated_data["urlForDataFile"]
             )
 
         return result
@@ -219,11 +218,11 @@ class SensorResultVerboseSerializer(serializers.ModelSerializer):
         # sensor_id = intervention["id"]
 
         result = SensorResult.objects.create(
-            started=self.data["started"],
-            ended=self.data["ended"],
-            type=self.data["type"],
+            started=validated_data["started"],
+            ended=validated_data["ended"],
+            type=validated_data["type"],
             sensor=Sensor.objects.get(id=validated_data['sensor'].id),
-            urlForDataFile=self.data["urlForDataFile"]
+            urlForDataFile=validated_data["urlForDataFile"]
             )
 
         return result
@@ -255,11 +254,11 @@ class TaskResultVerboseSerializer(serializers.ModelSerializer):
         # print validated_data['task']
 
         result = TaskResult.objects.create(
-            started=self.data["started"],
-            ended=self.data["ended"],
-            type=self.data["type"],
+            started=validated_data["started"],
+            ended=validated_data["ended"],
+            type=validated_data["type"],
             task=TaskIntervention.objects.get(id=validated_data['task'].id),
-            urlForDataFile=self.data["urlForDataFile"]
+            urlForDataFile=validated_data["urlForDataFile"]
             )
 
         return result
@@ -289,13 +288,12 @@ class QuestionResultVerboseSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         # intervention = validated_data.pop('question')
         # question_id = intervention["id"]
-
         result = QuestionResult.objects.create(
-            started=self.data["started"],
-            ended=self.data["ended"],
-            type=self.data["type"],
+            started=validated_data["started"],
+            ended=validated_data["ended"],
+            type=validated_data["type"],
             question=QuestionIntervention.objects.get(id=validated_data['question'].id),
-            answer=self.data["answer"]
+            answer=validated_data["answer"]
             )
 
         return result
