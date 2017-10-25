@@ -26,7 +26,7 @@ class MediaPresentation(models.Model):
 class ComplexCondition(models.Model):
     value = models.CharField(max_length=50)
     type = models.CharField(max_length=50)
-    condition = models.CharField(max_length=100)
+    condition = models.CharField(max_length=100, blank=True)
     next = models.IntegerField()
 
 class Intervention(models.Model):
@@ -90,8 +90,8 @@ class QuestionIntervention(Intervention):
     )
     conditions = JSONField(blank=True, null=True)
     options = JSONField(blank=True, null=True)
-    complexConditions = JSONField(blank=True, null=True)
-    # complexConditions = models.ManyToManyField(ComplexCondition, blank=True)
+    # complexConditions = JSONField(blank=True, null=True)
+    complexConditions = models.ManyToManyField(ComplexCondition, blank=True)
 
     def __init__(self, *args, **kwargs):
         kwargs['type'] = "question"

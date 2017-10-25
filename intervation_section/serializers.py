@@ -101,10 +101,14 @@ class EmptyInterventionSerializer(serializers.ModelSerializer):
         )
 
     def create(self, validated_data):
+        print "TO NA EMPTY1!1"
         if (len(Intervention.objects.all()) == 0):
             validated_data['id'] = 1
         else:
             validated_data['id'] = Intervention.objects.all().latest('id').id + 1
+
+        print "TO NA EMPTY"
+        print validated_data
 
         medias_data = validated_data.pop('medias')
         arr = []
@@ -139,6 +143,7 @@ class TaskInterventionSerializer(serializers.ModelSerializer):
         }
 
     def create(self, validated_data):
+        print "TONA TASK"
         if (len(Intervention.objects.all()) == 0):
             validated_data['id'] = 1
         else:
@@ -177,6 +182,7 @@ class MediaInterventionSerializer(serializers.ModelSerializer):
         }
 
     def create(self, validated_data):
+        print "TO NA MEDIA!"
         if (len(Intervention.objects.all()) == 0):
             validated_data['id'] = 1
         else:
@@ -201,6 +207,7 @@ class MediaInterventionSerializer(serializers.ModelSerializer):
 class QuestionInterventionSerializer(serializers.ModelSerializer):
     medias = MediaPresentationSerializer(many=True)
     complexConditions = ComplexConditionSerializer(many=True)
+    # complexConditions = JSONSerializerField()
     options = JSONSerializerField()
     conditions = JSONSerializerField()
 
@@ -217,6 +224,7 @@ class QuestionInterventionSerializer(serializers.ModelSerializer):
         }
 
     def create(self, validated_data):
+        print "TONAQUESTION"
         if (len(Intervention.objects.all()) == 0):
             validated_data['id'] = 1
         else:

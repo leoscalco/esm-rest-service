@@ -156,7 +156,7 @@ class ActiveEventVerboseSerializer(serializers.ModelSerializer):
         # print "-----"
         # # print self.data
 
-        # print "calma 111"
+        print "calma 111"
         try:
             with transaction.atomic():
                 if (len(Event.objects.all()) == 0):
@@ -186,23 +186,32 @@ class ActiveEventVerboseSerializer(serializers.ModelSerializer):
 
                 interventions = []
                 for i in interventions_data:
-                    medias_data = i.pop('medias')
-                    # print medias_data
-                    arr = []
-                    for media_data in medias_data:
-                        media_data['id'] = MediaPresentation.objects.all().latest('id').id + 1
-                        n = MediaPresentation.objects.create(**media_data)
-                        arr.append(n.id)
+                    # medias_data = i.pop('medias')
+                    # # print medias_data
+                    # arr = []
+                    # for media_data in medias_data:
+                    #     media_data['id'] = MediaPresentation.objects.all().latest('id').id + 1
+                    #     n = MediaPresentation.objects.create(**media_data)
+                    #     arr.append(n.id)
                     print i
 
                     if i['type'] == "empty":
-                        interventions.append(EmptyIntervention.objects.create(**i))
+                        # interventions.append(EmptyIntervention.objects.create(**i))
+                        emp = EmptyInterventionSerializer()
+                        interventions.append(emp.create(i))
                     if i['type'] == "media":
-                        interventions.append(MediaIntervention.objects.create(**i))
+                        # interventions.append(MediaIntervention.objects.create(**i))
+                        med = MediaInterventionSerializer()
+                        interventions.append(med.create(i))
                     if i['type'] == "task":
-                        interventions.append(TaskIntervention.objects.create(**i))
+                        # interventions.append(TaskIntervention.objects.create(**i))
+                        task = TaskInterventionSerializer()
+                        interventions.append(task.create(i))
                     if i['type'] == "question":
-                        interventions.append(QuestionIntervention.objects.create(**i))
+                        # interventions.append(QuestionIntervention.objects.create(**i))
+                        ques = QuestionInterventionSerializer()
+                        interventions.append(ques.create(i))
+                        # interventions.append(q)
 
                     # if i['type'] == "empty":
                     #     emps = EmptyInterventionSerializer()
@@ -226,10 +235,10 @@ class ActiveEventVerboseSerializer(serializers.ModelSerializer):
                     #     ques = QuestionInterventionSerializer()
                     #     interventions.append(ques.create(i))
 
-                    for a in arr:
-                        interventions[-1].medias.add(a)
-                    # interventions[-1].medias = arr
-                    interventions[-1].save()
+                    # for a in arr:
+                    #     interventions[-1].medias.add(a)
+                    # # interventions[-1].medias = arr
+                    # interventions[-1].save()
 
                 activeevent = ActiveEvent.objects.create(
                     **validated_data
