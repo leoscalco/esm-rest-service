@@ -49,6 +49,13 @@ class EventVerboseSerializer(serializers.ModelSerializer):
         'triggers', 'sensors', 'interventions'
         )
 
+        extra_kwargs = {
+            "id": {
+                "read_only": False,
+                "required": False,
+            },
+        }
+
     def to_representation(self, obj):
         """
         Because GalleryItem is Polymorphic
@@ -92,7 +99,7 @@ class ActiveEventVerboseSerializer(serializers.ModelSerializer):
            'triggers', 'sensors',
            'interventions')
 
-    extra_kwargs = {
+        extra_kwargs = {
             "id": {
                 "read_only": False,
                 "required": False,
@@ -115,35 +122,100 @@ class ActiveEventVerboseSerializer(serializers.ModelSerializer):
                 triggers_data = validated_data.pop('triggers')
                 sensors_data = validated_data.pop('sensors')
 
+                triggers = []
                 for trigger in triggers_data:
-                    t = Trigger.objects.create(
-                        **trigger
-                    )
-                    instance.triggers.add(t)
+                    if ('id' in trigger):
+                        obj = Trigger.objects.get(id=trigger['id'])
+                        obj.triggerType = trigger['triggerType']
+                        obj.triggerCondition = trigger['triggerCondition']
+                        obj.priority = trigger['priority']
+                        obj.save()
+                        t = obj
+                    else:
+                        t = Trigger.objects.create(
+                            **trigger
+                        )
+                    triggers.append(t.id)
 
+                instance.triggers = triggers
+
+                sensors = []
                 for sensor in sensors_data:
-                    s = Sensor.objects.create(
-                        **sensor
-                    )
-                    instance.sensors.add(s)
+                    if ('id' in sensor):
+                        obj = Sensor.objects.get(id=sensor['id'])
+                        obj.sensorType = sensor['sensorType']
+                        obj.sensor = sensor['sensor']
+                        obj.SENSOR_TYPE_INTERVAL = sensor['SENSOR_TYPE_INTERVAL']
+                        obj.SENSOR_TYPE_INTERVAL = sensor['SENSOR_TYPE_TASK']
 
-                for intervention in interventions_data:
-                    medias_data = intervention.pop('medias')
-                    arr = []
-                    for media_data in medias_data:
-                        n = MediaPresentation.objects.create(**media_data)
-                        arr.append(n.id)
-                    if intervention['type'] == "empty":
-                        i = EmptyIntervention.objects.create(**intervention)
-                    if intervention['type'] == "media":
-                        i =MediaIntervention.objects.create(**intervention)
-                    if intervention['type'] == "task":
-                        i = TaskIntervention.objects.create(**intervention)
-                    if intervention['type'] == "question":
-                        i = QuestionIntervention.objects.create(**intervention)
+                        obj.save()
+                        s = obj
+                    else:
+                        s = Sensor.objects.create(
+                            **sensor
+                        )
+                    sensors.append(s.id)
 
-                    i.medias = arr
-                    instance.interventions.add(i)
+                instance.sensors = sensors
+
+                interventions = []
+                for i in interventions_data:
+                    # medias_data = intervention.pop('medias')
+                    # arr = []
+                    # for media_data in medias_data:
+                    #     n = MediaPresentation.objects.create(**media_data)
+                    #     arr.append(n.id)
+                    # if intervention['type'] == "empty":
+                    #     i = EmptyIntervention.objects.create(**intervention)
+                    # if intervention['type'] == "media":
+                    #     i =MediaIntervention.objects.create(**intervention)
+                    # if intervention['type'] == "task":
+                    #     i = TaskIntervention.objects.create(**intervention)
+                    # if intervention['type'] == "question":
+                    #     i = QuestionIntervention.objects.create(**intervention)
+                    if ('id' in i):
+                        if i['type'] == "empty":
+                            # interventions.append(EmptyIntervention.objects.create(**i))
+                            emp = EmptyInterventionSerializer()
+                            interventions.append(emp.update(
+                                EmptyIntervention.objects.get(id=i['id']), i).id)
+                        if i['type'] == "media":
+                            # interventions.append(MediaIntervention.objects.create(**i))
+                            med = MediaInterventionSerializer()
+                            interventions.append(med.update(
+                                MediaIntervention.objects.get(id=i['id']), i).id)
+                        if i['type'] == "task":
+                            # interventions.append(TaskIntervention.objects.create(**i))
+                            task = TaskInterventionSerializer()
+                            interventions.append(task.update(
+                                TaskIntervention.objects.get(id=i['id']), i).id)
+                        if i['type'] == "question":
+                            # interventions.append(QuestionIntervention.objects.create(**i))
+                            ques = QuestionInterventionSerializer()
+                            interventions.append(ques.update(
+                                QuestionIntervention.objects.get(id=i['id']), i).id)
+                            # interventions.append(q)
+                    else:
+                        # i.medias = arr
+                        if i['type'] == "empty":
+                            # interventions.append(EmptyIntervention.objects.create(**i))
+                            emp = EmptyInterventionSerializer()
+                            interventions.append(emp.create(i).id)
+                        if i['type'] == "media":
+                            # interventions.append(MediaIntervention.objects.create(**i))
+                            med = MediaInterventionSerializer()
+                            interventions.append(med.create(i).id)
+                        if i['type'] == "task":
+                            # interventions.append(TaskIntervention.objects.create(**i))
+                            task = TaskInterventionSerializer()
+                            interventions.append(task.create(i).id)
+                        if i['type'] == "question":
+                            # interventions.append(QuestionIntervention.objects.create(**i))
+                            ques = QuestionInterventionSerializer()
+                            interventions.append(ques.create(i).id)
+                            # interventions.append(q)
+
+                instance.interventions = interventions
 
                 instance.save()
                 return instance
@@ -156,7 +228,6 @@ class ActiveEventVerboseSerializer(serializers.ModelSerializer):
         # print "-----"
         # # print self.data
 
-        print "calma 111"
         try:
             with transaction.atomic():
                 if (len(Event.objects.all()) == 0):
@@ -193,7 +264,7 @@ class ActiveEventVerboseSerializer(serializers.ModelSerializer):
                     #     media_data['id'] = MediaPresentation.objects.all().latest('id').id + 1
                     #     n = MediaPresentation.objects.create(**media_data)
                     #     arr.append(n.id)
-                    print i
+                    # print i
 
                     if i['type'] == "empty":
                         # interventions.append(EmptyIntervention.objects.create(**i))

@@ -2,6 +2,7 @@ from django.contrib.auth.models import User, Group
 from rest_framework import serializers
 from models import Observer, Participant, Person
 from django.db import IntegrityError, transaction
+from django.contrib.auth.validators import UnicodeUsernameValidator
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -22,6 +23,9 @@ class ObserverContactsSerializer(serializers.ModelSerializer):
                 "read_only": False,
                 "required": False,
             },
+            "email":{
+                'validators': [UnicodeUsernameValidator()],
+            }
         }
 
 class ObserverSerializer(serializers.ModelSerializer):
@@ -41,6 +45,9 @@ class ObserverVerboseSerializer(serializers.ModelSerializer):
                 "read_only": False,
                 "required": False,
             },
+            "email":{
+                'validators': [UnicodeUsernameValidator()],
+            }
         }
 
     def create(self, validated_data):
@@ -122,6 +129,9 @@ class ParticipantSerializer(serializers.ModelSerializer):
                 "read_only": False,
                 "required": False,
             },
+            "email":{
+                'validators': [UnicodeUsernameValidator()],
+            }
         }
 
     def create(self, validated_data):

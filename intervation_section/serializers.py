@@ -6,6 +6,12 @@ class MediaPresentationSerializer(serializers.ModelSerializer):
     class Meta:
         model = MediaPresentation
         fields = ('id', 'type', 'mediaUrl')
+        extra_kwargs = {
+            "id": {
+                "read_only": False,
+                "required": False,
+            },
+        }
 
 
 class ComplexConditionSerializer(serializers.ModelSerializer):
@@ -50,10 +56,6 @@ class InterventionSerializer(serializers.ModelSerializer):
         """
         Because Results is Polymorphic
         """
-        print "OBJETO"
-        print obj
-
-
         if obj['type'] == 'empty':
             # if obj['type'] == 'sensor'
             # self.fields += ()
@@ -101,14 +103,10 @@ class EmptyInterventionSerializer(serializers.ModelSerializer):
         )
 
     def create(self, validated_data):
-        print "TO NA EMPTY1!1"
         if (len(Intervention.objects.all()) == 0):
             validated_data['id'] = 1
         else:
             validated_data['id'] = Intervention.objects.all().latest('id').id + 1
-
-        print "TO NA EMPTY"
-        print validated_data
 
         medias_data = validated_data.pop('medias')
         arr = []
@@ -125,6 +123,37 @@ class EmptyInterventionSerializer(serializers.ModelSerializer):
         empty_intervention.medias = arr
         empty_intervention.save()
         return empty_intervention
+
+    def update(self, instance, validated_data):
+
+        instance.statement = validated_data.get('statement')
+        instance.orderPosition = validated_data.get('orderPosition')
+        instance.first = validated_data.get('first')
+        instance.next = validated_data.get('next')
+        instance.obligatory = validated_data.get('obligatory')
+
+        medias_data = validated_data.pop('medias')
+        arr = []
+        for media in medias_data:
+            if ('id' in media):
+                instance_media = MediaPresentation.objects.get(id=media['id'])
+                instance_media.type = media['type']
+                instance_media.mediaUrl = media['mediaUrl']
+                instance_media.save()
+                n = instance_media
+            else:
+                if (len(MediaPresentation.objects.all()) == 0):
+                    media['id'] = 1
+                else:
+                    media['id'] = MediaPresentation.objects.all().latest('id').id + 1
+                n = MediaPresentation.objects.create(**media)
+            arr.append(n.id)
+
+        instance.medias = arr
+        instance.save()
+
+        return instance
+
 
 class TaskInterventionSerializer(serializers.ModelSerializer):
     medias = MediaPresentationSerializer(many=True)
@@ -143,7 +172,6 @@ class TaskInterventionSerializer(serializers.ModelSerializer):
         }
 
     def create(self, validated_data):
-        print "TONA TASK"
         if (len(Intervention.objects.all()) == 0):
             validated_data['id'] = 1
         else:
@@ -164,6 +192,37 @@ class TaskInterventionSerializer(serializers.ModelSerializer):
         intervention.medias = arr
         intervention.save()
         return intervention
+
+    def update(self, instance, validated_data):
+
+        instance.statement = validated_data.get('statement')
+        instance.orderPosition = validated_data.get('orderPosition')
+        instance.first = validated_data.get('first')
+        instance.next = validated_data.get('next')
+        instance.obligatory = validated_data.get('obligatory')
+        instance.appPackage = validated_data.get('appPackage')
+
+        medias_data = validated_data.pop('medias')
+        arr = []
+        for media in medias_data:
+            if ('id' in media):
+                instance_media = MediaPresentation.objects.get(id=media['id'])
+                instance_media.type = media['type']
+                instance_media.mediaUrl = media['mediaUrl']
+                instance_media.save()
+                n = instance_media
+            else:
+                if (len(MediaPresentation.objects.all()) == 0):
+                    media['id'] = 1
+                else:
+                    media['id'] = MediaPresentation.objects.all().latest('id').id + 1
+                n = MediaPresentation.objects.create(**media)
+            arr.append(n.id)
+
+        instance.medias = arr
+        instance.save()
+
+        return instance
 
 class MediaInterventionSerializer(serializers.ModelSerializer):
     medias = MediaPresentationSerializer(many=True)
@@ -204,6 +263,37 @@ class MediaInterventionSerializer(serializers.ModelSerializer):
         intervention.save()
         return intervention
 
+    def update(self, instance, validated_data):
+
+        instance.statement = validated_data.get('statement')
+        instance.orderPosition = validated_data.get('orderPosition')
+        instance.first = validated_data.get('first')
+        instance.next = validated_data.get('next')
+        instance.obligatory = validated_data.get('obligatory')
+        instance.mediaType = validated_data.get('mediaType')
+
+        medias_data = validated_data.pop('medias')
+        arr = []
+        for media in medias_data:
+            if ('id' in media):
+                instance_media = MediaPresentation.objects.get(id=media['id'])
+                instance_media.type = media['type']
+                instance_media.mediaUrl = media['mediaUrl']
+                instance_media.save()
+                n = instance_media
+            else:
+                if (len(MediaPresentation.objects.all()) == 0):
+                    media['id'] = 1
+                else:
+                    media['id'] = MediaPresentation.objects.all().latest('id').id + 1
+                n = MediaPresentation.objects.create(**media)
+            arr.append(n.id)
+
+        instance.medias = arr
+        instance.save()
+
+        return instance
+
 class QuestionInterventionSerializer(serializers.ModelSerializer):
     medias = MediaPresentationSerializer(many=True)
     complexConditions = ComplexConditionSerializer(many=True)
@@ -224,7 +314,6 @@ class QuestionInterventionSerializer(serializers.ModelSerializer):
         }
 
     def create(self, validated_data):
-        print "TONAQUESTION"
         if (len(Intervention.objects.all()) == 0):
             validated_data['id'] = 1
         else:
@@ -249,6 +338,7 @@ class QuestionInterventionSerializer(serializers.ModelSerializer):
                 media_data['id'] = 1
             else:
                 media_data['id'] = MediaPresentation.objects.all().latest('id').id + 1
+
             n = MediaPresentation.objects.create(**media_data)
             arr_medias.append(n.id)
 
@@ -271,3 +361,46 @@ class QuestionInterventionSerializer(serializers.ModelSerializer):
 
         intervention.save()
         return intervention
+
+    def update(self, instance, validated_data):
+
+        instance.statement = validated_data.get('statement')
+        instance.orderPosition = validated_data.get('orderPosition')
+        instance.first = validated_data.get('first')
+        instance.next = validated_data.get('next')
+        instance.obligatory = validated_data.get('obligatory')
+        instance.mediaType = validated_data.get('mediaType')
+        instance.questionType = validated_data.get('questionType')
+        instance.options = validated_data.get('options')
+        instance.conditions = validated_data.get('conditions')
+
+        complex_cond_data = validated_data.pop('complexConditions')
+        medias_data = validated_data.pop('medias')
+
+        arr_compl = []
+
+        for cc in complex_cond_data:
+            n = ComplexCondition.objects.create(**cc)
+            arr_compl.append(n.id)
+
+        arr = []
+        for media in medias_data:
+            if ('id' in media):
+                instance_media = MediaPresentation.objects.get(id=media['id'])
+                instance_media.type = media['type']
+                instance_media.mediaUrl = media['mediaUrl']
+                instance_media.save()
+                n = instance_media
+            else:
+                if (len(MediaPresentation.objects.all()) == 0):
+                    media['id'] = 1
+                else:
+                    media['id'] = MediaPresentation.objects.all().latest('id').id + 1
+                n = MediaPresentation.objects.create(**media)
+            arr.append(n.id)
+
+        instance.medias = arr
+        instance.complexConditions = arr_compl
+        instance.save()
+
+        return instance

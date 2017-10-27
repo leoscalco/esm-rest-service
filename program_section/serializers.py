@@ -51,6 +51,7 @@ class ProgramVerboseSerializer(serializers.ModelSerializer):
                     observers.append(Observer.objects.create(
                         role=o['role'], name=o['name'], email=o['email']
                         ))
+
                     for c in cs:
                         if Participant.objects.filter(email=c['email']).exists():
                             p = Participant.objects.get(email=c['email'])
@@ -87,6 +88,7 @@ class ProgramVerboseSerializer(serializers.ModelSerializer):
                 program.save()
 
                 return program
+
         except IntegrityError:
             return "Error"
 
@@ -106,18 +108,33 @@ class ProgramVerboseSerializer(serializers.ModelSerializer):
 
                 participants = []
                 for p in participants_data:
-                    participants.append(
-                        Participant.objects.create(
-                            name=p['name'], email=p['email'])
-                        )
+                    if ('id' in p):
+                        obj = Participant.objects.get(id=p['id'])
+                        obj.name = p['name']
+                        obj.email = p['email']
+                        obj.save()
+                    else:
+                        obj = Participant.objects.create(
+                            name=p['name'], email=p['email']
+                            )
+                    participants.append(obj.id)
 
                 observers = []
                 for o in observers_data:
                     cs = o.pop('contacts')
 
-                    observers.append(Observer.objects.create(
-                        role=o['role'], name=o['name'], email=o['email']
-                        ))
+                    if ('id' in o):
+                        obj = Observer.objects.get(id=o['id'])
+                        obj.role = o['role']
+                        obj.name = o['name']
+                        obj.email = o['email']
+                        obj.save()
+                        observers.append(obj)
+                    else:
+                        observers.append(Observer.objects.create(
+                            role=o['role'], name=o['name'], email=o['email']
+                            ))
+
                     for c in cs:
                         if Participant.objects.filter(email=c['email']).exists():
                             p = Participant.objects.get(email=c['email'])
@@ -128,11 +145,13 @@ class ProgramVerboseSerializer(serializers.ModelSerializer):
                         observers[-1].contacts.add(p)
                     observers[-1].save()
 
-                for p in participants:
-                    instance.participants.add(p)
+                instance.participants = participants
 
+                observers_id = []
                 for o in observers:
-                    instance.observers.add(o)
+                    observers_id.append(o.id)
+
+                instance.observers = observers_id
 
                 # for participant in participants_data:
                 #     ps = ParticipantSerializer()
@@ -145,11 +164,19 @@ class ProgramVerboseSerializer(serializers.ModelSerializer):
                 #     os = ObserverVerboseSerializer()
                 #     instance.observers.add(os.create(observer))
 
+                events = []
                 for event in events_data:
-                    if event['type'] == "active":
-                        aes = ActiveEventVerboseSerializer()
-                        # aes.saving_data(event)
-                        instance.events.add(aes.saving_data(event))
+                    if ('id' in event):
+                        if event['type'] == "active":
+                            aes = ActiveEventVerboseSerializer()
+                            events.append(aes.update(ActiveEvent.objects.get(id=event['id']), event).id)
+                    else:
+                        if event['type'] == "active":
+                            aes = ActiveEventVerboseSerializer()
+                            # aes.saving_data(event)
+                            events.append(aes.saving_data(event).id)
+
+                instance.events = events
 
                 instance.save()
 
