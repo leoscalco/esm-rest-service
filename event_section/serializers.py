@@ -159,6 +159,7 @@ class ActiveEventVerboseSerializer(serializers.ModelSerializer):
                 instance.sensors = sensors
 
                 interventions = []
+
                 for i in interventions_data:
                     # medias_data = intervention.pop('medias')
                     # arr = []
@@ -174,6 +175,7 @@ class ActiveEventVerboseSerializer(serializers.ModelSerializer):
                     # if intervention['type'] == "question":
                     #     i = QuestionIntervention.objects.create(**intervention)
                     if ('id' in i):
+
                         if i['type'] == "empty":
                             # interventions.append(EmptyIntervention.objects.create(**i))
                             emp = EmptyInterventionSerializer()
@@ -198,6 +200,7 @@ class ActiveEventVerboseSerializer(serializers.ModelSerializer):
                     else:
                         # i.medias = arr
                         if i['type'] == "empty":
+
                             # interventions.append(EmptyIntervention.objects.create(**i))
                             emp = EmptyInterventionSerializer()
                             interventions.append(emp.create(i).id)

@@ -101,6 +101,12 @@ class EmptyInterventionSerializer(serializers.ModelSerializer):
         fields = ('id', 'type', 'statement','medias',
             'orderPosition', 'first', 'next', 'obligatory'
         )
+        extra_kwargs = {
+            "id": {
+                "read_only": False,
+                "required": False,
+            },
+        }
 
     def create(self, validated_data):
         if (len(Intervention.objects.all()) == 0):
@@ -241,7 +247,6 @@ class MediaInterventionSerializer(serializers.ModelSerializer):
         }
 
     def create(self, validated_data):
-        print "TO NA MEDIA!"
         if (len(Intervention.objects.all()) == 0):
             validated_data['id'] = 1
         else:

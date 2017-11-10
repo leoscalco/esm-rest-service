@@ -57,7 +57,7 @@ class ObserverVerboseSerializer(serializers.ModelSerializer):
                 if (len(Observer.objects.all()) == 0):
                     validated_data['id'] = 1
                 else:
-                    validated_data['id'] = Observer.objects.all().latest('id').id
+                    validated_data['id'] = Observer.objects.all().latest('id').id + 1
 
                 contacts_data = validated_data.pop('contacts')
 
