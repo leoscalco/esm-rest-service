@@ -66,15 +66,39 @@ class ObserverSerializer(serializers.ModelSerializer):
                 'validators': [UnicodeUsernameValidator()],
             }
         }
-        def create(self, validated_data):
-            if (len(Person.objects.all()) == 0):
-                validated_data['id'] = 1
-            else:
-                validated_data['id'] = Person.objects.latest().id + 1
+    def create(self, validated_data):
+        try:
+            with transaction.atomic():
+                if (len(Person.objects.all()) == 0):
+                    validated_data['id'] = 1
+                else:
+                    validated_data['id'] = Person.objects.all().latest('id').id + 1
 
-            p = Observer.objects.create(**validated_data)
+                contacts_data = validated_data.pop('contacts')
 
-            return p
+                participants = []
+                for contact in contacts_data:
+                    # contact['email'] = "forc@email.com"
+                    participants.append(Participant.objects.create(name=contact['name'],
+                        email=contact['email']))
+
+                # validated_data['contacts'] = participants
+
+                observer = Observer.objects.create(
+                    id=validated_data['id'],
+                    name=validated_data['name'],
+                    email=validated_data['email'],
+                    role=validated_data['role']
+                    )
+
+                for p in participants:
+                    observer.contacts.add(p)
+
+                observer.save()
+
+                return observer
+        except IntegrityError:
+            return "error"
 
 class ObserverVerboseSerializer(serializers.ModelSerializer):
     contacts = ObserverContactsSerializer(many=True)
