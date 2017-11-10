@@ -14,6 +14,30 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
         model = Group
         fields = ('url', 'name')
 
+# class PersonSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Person
+#         fields = ('id', 'name', 'email')
+#         extra_kwargs = {
+#             "id": {
+#                 "read_only": False,
+#                 "required": False,
+#             }
+#         }
+
+#     def to_interval_value(self, obj):
+#         try:
+#             obj_ = Observer.objects.get(id=obj['id'])
+#         except Observer.objects.DoesNotExist:
+#             obj_ = Participant.objects.get(id=obj['id'])
+
+#         if isinstance(obj_, Observer):
+#             return ObserverSerializer(context=self.context).to_interval_value(obj)
+#         elif isinstance(obj_, Participant):
+#             return ParticipantSerializer(context=self.context).to_interval_value(obj)
+#         else:
+#             return super(PersonSerializer, self).to_interval_value(obj)
+
 class ObserverContactsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Participant
@@ -33,6 +57,34 @@ class ObserverSerializer(serializers.ModelSerializer):
     class Meta:
         model = Observer
         fields = ('id', 'name', 'email', 'role', 'contacts')
+        extra_kwargs = {
+            "id": {
+                "read_only": False,
+                "required": False,
+            },
+            "email":{
+                'validators': [UnicodeUsernameValidator()],
+            }
+        }
+
+        def create(self, validated_data):
+        # contacts_data = validated_data.get('contacts')
+            try:
+                with transaction.atomic():
+                    if (len(Person.objects.all()) == 0):
+                        validated_data['id'] = 1
+                    else:
+                        validated_data['id'] = Person.objects.all().latest('id').id + 1
+
+                    observer = Observer.objects.create(
+                        **validated_data
+                    )
+
+                    return observer
+            except IntegrityError:
+                return "Error"
+
+
 
 class ObserverVerboseSerializer(serializers.ModelSerializer):
     contacts = ObserverContactsSerializer(many=True)
@@ -54,7 +106,7 @@ class ObserverVerboseSerializer(serializers.ModelSerializer):
         # contacts_data = validated_data.get('contacts')
         try:
             with transaction.atomic():
-                if (len(Observer.objects.all()) == 0):
+                if (len(Person.objects.all()) == 0):
                     validated_data['id'] = 1
                 else:
                     validated_data['id'] = Person.objects.all().latest('id').id + 1
@@ -135,7 +187,7 @@ class ParticipantSerializer(serializers.ModelSerializer):
         }
 
     def create(self, validated_data):
-        if (len(Participant.objects.all()) == 0):
+        if (len(Person.objects.all()) == 0):
             validated_data['id'] = 1
         else:
             validated_data['id'] = Person.objects.all().latest('id').id + 1
