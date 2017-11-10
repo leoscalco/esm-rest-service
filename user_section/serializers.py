@@ -66,19 +66,15 @@ class ObserverSerializer(serializers.ModelSerializer):
                 'validators': [UnicodeUsernameValidator()],
             }
         }
-
         def create(self, validated_data):
-            # contacts_data = validated_data.get('contacts')
             if (len(Person.objects.all()) == 0):
                 validated_data['id'] = 1
             else:
-                validated_data['id'] = Person.objects.all().latest('id').id + 1
+                validated_data['id'] = Person.objects.latest().id + 1
 
-            observer = Observer.objects.create(
-                **validated_data
-            )
+            p = Observer.objects.create(**validated_data)
 
-            return observer
+            return p
 
 class ObserverVerboseSerializer(serializers.ModelSerializer):
     contacts = ObserverContactsSerializer(many=True)
