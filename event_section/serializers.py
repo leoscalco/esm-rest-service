@@ -133,7 +133,9 @@ class ActiveEventVerboseSerializer(serializers.ModelSerializer):
                         t = obj
                     else:
                         t = Trigger.objects.create(
-                            **trigger
+                            triggerType=trigger['triggerType'],
+                            triggerCondition=trigger['triggerCondition'],
+                            priority=trigger['priority']
                         )
                     triggers.append(t.id)
 
