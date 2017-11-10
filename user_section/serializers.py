@@ -68,23 +68,17 @@ class ObserverSerializer(serializers.ModelSerializer):
         }
 
         def create(self, validated_data):
-        # contacts_data = validated_data.get('contacts')
-            try:
-                with transaction.atomic():
-                    if (len(Person.objects.all()) == 0):
-                        validated_data['id'] = 1
-                    else:
-                        validated_data['id'] = Person.objects.all().latest('id').id + 1
+            # contacts_data = validated_data.get('contacts')
+            if (len(Person.objects.all()) == 0):
+                validated_data['id'] = 1
+            else:
+                validated_data['id'] = Person.objects.all().latest('id').id + 1
 
-                    observer = Observer.objects.create(
-                        **validated_data
-                    )
+            observer = Observer.objects.create(
+                **validated_data
+            )
 
-                    return observer
-            except IntegrityError:
-                return "Error"
-
-
+            return observer
 
 class ObserverVerboseSerializer(serializers.ModelSerializer):
     contacts = ObserverContactsSerializer(many=True)
