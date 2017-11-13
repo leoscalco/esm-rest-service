@@ -31,7 +31,7 @@ class ComplexCondition(models.Model):
 
 class Intervention(models.Model):
     type = models.CharField(max_length=10, default="empty")
-    statement = models.CharField(max_length=100)
+    statement = models.CharField(max_length=800)
     medias = models.ManyToManyField(MediaPresentation)
     orderPosition = models.IntegerField()
     first = models.BooleanField(default=False)
