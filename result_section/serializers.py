@@ -4,7 +4,7 @@ from result_section.models import *
 from event_section.models import *
 from user_section.serializers import ParticipantSerializer
 from event_section.serializers import EventVerboseSerializer
-from intervation_section.serializers import MediaInterventionSerializer, TaskInterventionSerializer, QuestionInterventionSerializer
+from intervation_section.serializers import MediaInterventionSerializer, TaskInterventionSerializer, QuestionInterventionSerializer, EmptyInterventionSerializer
 from sensor_section.serializers import SensorSerializer
 from intervation_section.models import *
 import json
@@ -47,6 +47,9 @@ class ResultsVerboseSerializer(serializers.ModelSerializer):
         elif obj['type'] == 'media':
             # obj = MediaResult.objects.get(id=obj['media'])
             return MediaResultVerboseSerializer(context=self.context).to_internal_value(obj)
+        elif obj['type'] == 'empty':
+            # obj = MediaResult.objects.get(id=obj['media'])
+            return EmptyResultVerboseSerializer(context=self.context).to_internal_value(obj)
         else:
             return super(ResultsSerializer, self).to_internal_value(obj)
 
@@ -68,6 +71,9 @@ class ResultsVerboseSerializer(serializers.ModelSerializer):
             elif obj.type == "media":
                 obj = MediaResult.objects.get(id=obj.id)
                 return MediaResultVerboseSerializer(context=self.context).to_representation(obj)
+            elif obj.type == "empty":
+                obj = EmptyResult.objects.get(id=obj.id)
+                return EmptyResultVerboseSerializer(context=self.context).to_representation(obj)
             else:
                 return super(ResultsSerializer, self).to_representation(obj)
         else:
@@ -83,6 +89,9 @@ class ResultsVerboseSerializer(serializers.ModelSerializer):
             elif obj['type'] == "media":
                 obj = MediaResult.objects.get(id=obj['id'])
                 return MediaResultVerboseSerializer(context=self.context).to_representation(obj)
+            elif obj['type'] == "empty":
+                obj = EmptyResult.objects.get(id=obj['id'])
+                return EmptyResultVerboseSerializer(context=self.context).to_representation(obj)
             else:
                 return super(ResultsSerializer, self).to_representation(obj)
 
@@ -111,6 +120,9 @@ class ResultsSerializer(serializers.ModelSerializer):
         elif obj.type == "media":
             obj = MediaResult.objects.get(id=obj.id)
             return MediaResultSerializer(context=self.context).to_representation(obj)
+        elif obj.type == "empty":
+            obj = EmptyResult.objects.get(id=obj.id)
+            return EmptyResultSerializer(context=self.context).to_representation(obj)
         else:
             return super(ResultsSerializer, self).to_representation(obj)
 
@@ -144,6 +156,8 @@ class ResultSessionVerboseSerializer(serializers.ModelSerializer):
                 new = TaskResultVerboseSerializer()
             if r['type'] == "sensor":
                 new = SensorResultVerboseSerializer()
+            if r['type'] == "empty":
+                new = EmptyResultVerboseSerializer()
 
             results.append(new.create(r))
 
@@ -263,6 +277,40 @@ class TaskResultVerboseSerializer(serializers.ModelSerializer):
 
         return result
 
+class EmptyResultSerializer(serializers.ModelSerializer):
+    # just id without, dict with
+    # participant = ParticipantSerializer(read_only=True)
+    # media = MediaInterventionSerializer()
+
+    class Meta:
+        model = EmptyResult
+        fields = ('id', 'type' ,'started', 'ended', 'empty')
+
+class EmptyResultVerboseSerializer(serializers.ModelSerializer):
+    # just id without, dict with
+    # participant = ParticipantSerializer()
+    # task = TaskInterventionSerializer()
+
+    class Meta:
+        model = EmptyResult
+        fields = ('id', 'type' ,'started', 'ended',
+            'empty')
+
+    def create(self, validated_data):
+        # intervention = validated_data.pop('task')
+        # task_id = intervention["id"]
+        # print validated_data
+        # print validated_data['task']
+
+        result = EmptyResult.objects.create(
+            started=validated_data["started"],
+            ended=validated_data["ended"],
+            type=validated_data["type"],
+            empty=EmptyIntervention.objects.get(id=validated_data['empty'].id)
+        )
+
+        return result
+
 class QuestionResultSerializer(serializers.ModelSerializer):
     # just id without, dict with
     # participant = ParticipantSerializer(read_only=True)
@@ -297,4 +345,6 @@ class QuestionResultVerboseSerializer(serializers.ModelSerializer):
             )
 
         return result
+
+
 

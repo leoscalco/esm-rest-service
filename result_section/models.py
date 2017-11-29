@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 from django.db import models
 from user_section.models import Participant
 from event_section.models import Event
-from intervation_section.models import MediaIntervention, QuestionIntervention, TaskIntervention
+from intervation_section.models import MediaIntervention, QuestionIntervention, TaskIntervention, EmptyIntervention
 from sensor_section.models import Sensor
 # Create your models here.
 
@@ -56,3 +56,11 @@ class TaskResult(Result):
         kwargs['type'] = "task"
         super(TaskResult, self).__init__(*args, **kwargs)
 
+class EmptyResult(Result):
+    empty = models.ForeignKey(EmptyIntervention)
+    # type = models.CharField(max_length=50, default="task")
+    # urlForDataFile = models.URLField()
+
+    def __init__(self, *args, **kwargs):
+        kwargs['type'] = "empty"
+        super(EmptyResult, self).__init__(*args, **kwargs)
