@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 from django.db import models
 from user_section.models import Participant
 from event_section.models import Event
-from intervation_section.models import MediaIntervention, QuestionIntervention, TaskIntervention, EmptyIntervention
+from intervention_section.models import MediaIntervention, QuestionIntervention, TaskIntervention, EmptyIntervention
 from sensor_section.models import Sensor
 # Create your models here.
 

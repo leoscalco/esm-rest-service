@@ -4,9 +4,9 @@ from result_section.models import *
 from event_section.models import *
 from user_section.serializers import ParticipantSerializer
 from event_section.serializers import EventVerboseSerializer
-from intervation_section.serializers import MediaInterventionSerializer, TaskInterventionSerializer, QuestionInterventionSerializer, EmptyInterventionSerializer
+from intervention_section.serializers import MediaInterventionSerializer, TaskInterventionSerializer, QuestionInterventionSerializer, EmptyInterventionSerializer
 from sensor_section.serializers import SensorSerializer
-from intervation_section.models import *
+from intervention_section.models import *
 import json
 
 class ResultSessionSerializer(serializers.ModelSerializer):

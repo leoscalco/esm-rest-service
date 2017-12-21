@@ -6,8 +6,8 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from rest_framework import viewsets
-from intervation_section.serializers import EmptyInterventionSerializer, TaskInterventionSerializer, MediaInterventionSerializer, QuestionInterventionSerializer, InterventionSerializer
-from intervation_section.models import EmptyIntervention, TaskIntervention, MediaIntervention, QuestionIntervention, Intervention
+from intervention_section.serializers import EmptyInterventionSerializer, TaskInterventionSerializer, MediaInterventionSerializer, QuestionInterventionSerializer, InterventionSerializer
+from intervention_section.models import EmptyIntervention, TaskIntervention, MediaIntervention, QuestionIntervention, Intervention
 
 class InterventionList(APIView):
 

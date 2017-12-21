@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 from django.db import models
 from trigger_section.models import EventTrigger
 from sensor_section.models import Sensor
-from intervation_section.models import EmptyIntervention, TaskIntervention, MediaIntervention, QuestionIntervention, Intervention
+from intervention_section.models import EmptyIntervention, TaskIntervention, MediaIntervention, QuestionIntervention, Intervention
 # from result_section.models import *
 
 class Event(models.Model):

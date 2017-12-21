@@ -1,6 +1,6 @@
 # from django.contrib.auth.models import User, Group
 from rest_framework import serializers
-from intervation_section.models import *
+from intervention_section.models import *
 
 class MediaPresentationSerializer(serializers.ModelSerializer):
     class Meta:

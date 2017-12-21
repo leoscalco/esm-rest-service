@@ -29,7 +29,7 @@ urlpatterns = [
     url(r'^', include('user_section.urls')),
     url(r'^', include('sensor_section.urls')),
     url(r'^', include('trigger_section.urls')),
-    url(r'^', include('intervation_section.urls')),
+    url(r'^', include('intervention_section.urls')),
     url(r'^', include('result_section.urls')),
     url(r'^', include('event_section.urls')),
     url(r'^', include('program_section.urls')),

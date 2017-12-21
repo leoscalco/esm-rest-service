@@ -3,7 +3,7 @@ from rest_framework import serializers
 from event_section.models import ActiveEvent, Event
 
 from trigger_section.models import EventTrigger as Trigger
-from intervation_section.models import *
+from intervention_section.models import *
 from sensor_section.models import Sensor
 from django.db import IntegrityError, transaction
 # from result_section.models import *
@@ -12,7 +12,7 @@ from django.db import IntegrityError, transaction
 from result_section.serializers import *
 from trigger_section.serializers import EventTriggerSerializer;
 from sensor_section.serializers import SensorSerializer
-from intervation_section.serializers import *
+from intervention_section.serializers import *
 
 # PASSANDO SOMENTE O ID
 

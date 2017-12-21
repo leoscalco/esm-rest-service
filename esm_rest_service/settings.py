@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'user_section',
     'sensor_section',
     'trigger_section',
-    'intervation_section',
+    'intervention_section',
     'result_section',
     'event_section',
     'program_section',
