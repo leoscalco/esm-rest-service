@@ -3,11 +3,13 @@ from __future__ import unicode_literals
 
 from django.db import models
 
+
 # Create your models here.
 
 class Person(models.Model):
     name = models.CharField(max_length=200)
     email = models.EmailField(default='', unique=True)
+
     # contacts = models.ManyToManyField("self", related_name='contatos', blank=True)
 
     class Meta:
@@ -17,6 +19,7 @@ class Person(models.Model):
     def __unicode__(self):
         return u'%s' % self.name
 
+
 class Participant(Person):
 
     # observerResponsible = models.ForeignKey(Observer, related_name="contacts", on_delete=models.CASCADE, default=1)
@@ -24,10 +27,11 @@ class Participant(Person):
     def __unicode__(self):
         return u'%s' % self.name
 
+
 class Observer(Person):
     role = models.CharField(max_length=50)
     contacts = models.ManyToManyField(Participant, related_name='contacts', blank=True)
 
+
 class Admin(Person):
     password = models.CharField(max_length=20)
-

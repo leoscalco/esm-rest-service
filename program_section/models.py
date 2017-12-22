@@ -1,8 +1,10 @@
 from __future__ import unicode_literals
 
 from django.db import models
-from user_section.models import Participant, Observer
+
 from event_section.models import ActiveEvent, PassiveEvent, Event
+from user_section.models import Participant, Observer
+
 
 class Program(models.Model):
     title = models.CharField(max_length=150)

@@ -1,18 +1,19 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from django.http import Http404
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
 
-from rest_framework import viewsets
+from django.http import Http404
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
 from trigger_section.serializers import *
-from trigger_section.models import EventTrigger
+
 
 class EventTriggerList(APIView):
     """
     List all eventTriggers, or create a new eventTrigger
     """
+
     def get(self, request, format=None):
         eventTriggers = EventTrigger.objects.all()
         serializer = EventTriggerSerializer(eventTriggers, many=True)
@@ -25,10 +26,12 @@ class EventTriggerList(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 class EventTrigerDetail(APIView):
     """
     Retrieve, update or delete a eventTrigger instance.
     """
+
     def get_object(self, pk):
         try:
             return EventTrigger.objects.get(pk=pk)

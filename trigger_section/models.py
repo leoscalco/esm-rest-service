@@ -4,11 +4,6 @@ from django.db import models
 
 
 class EventTrigger(models.Model):
-    # /** type trigger (time, manual, contextual). */
-    # TIME = "T"
-    # MANUAL = "M"
-    # CONTEXTUAL = "C"
-
     # TRIGGER_TYPE = (
     #     (TIME, "time"),
     #     (MANUAL, "manual"),
@@ -16,9 +11,10 @@ class EventTrigger(models.Model):
     # )
 
     triggerType = models.CharField(
-        max_length = 10,
-        default = "time"
+        max_length=10,
+        default="time"
     )
 
     triggerCondition = models.CharField(max_length=50)
     priority = models.CharField(max_length=20)
+    timeOut = models.IntegerField(default=1800000)

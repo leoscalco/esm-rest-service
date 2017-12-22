@@ -14,8 +14,9 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf.urls import url, include
-from rest_framework import routers
 from django.contrib import admin
+from rest_framework import routers
+
 from user_section import views
 
 router = routers.DefaultRouter()
@@ -33,6 +34,5 @@ urlpatterns = [
     url(r'^', include('result_section.urls')),
     url(r'^', include('event_section.urls')),
     url(r'^', include('program_section.urls')),
-
 
 ]

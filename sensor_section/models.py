@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 
 from django.db import models
 
+
 class Sensor(models.Model):
     #   /** Used for capturing sensors during an interval. */
     SENSOR_TYPE_INTERVAL = models.IntegerField(default=0)

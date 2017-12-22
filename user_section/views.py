@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from django.http import Http404
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status, generics, mixins
 
-from django.contrib.auth.models import User, Group
+from django.http import Http404
+from rest_framework import status
 from rest_framework import viewsets
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
 from user_section.serializers import *
-from user_section.models import Observer, Participant
+
 
 class UserViewSet(viewsets.ModelViewSet):
     """API endpoint that allows user to be viewed or edited."""
@@ -16,16 +16,19 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all().order_by('-date_joined')
     serializers_class = UserSerializer
 
+
 class GroupViewSet(viewsets.ModelViewSet):
     """API endpoint that allows groups to be viewed or edited."""
 
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
 
+
 class ObserverList(APIView):
     """
     List all persons, or create a new person
     """
+
     def get(self, request, format=None):
         persons = Observer.objects.all()
         if (request.GET.get('verbose') == 'true'):
@@ -47,10 +50,12 @@ class ObserverList(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 class ObserverDetail(APIView):
     """
     Retrieve, update or delete a observer instance.
     """
+
     def get_object(self, pk):
         try:
             return Observer.objects.get(pk=pk)
@@ -84,6 +89,7 @@ class ObserverDetail(APIView):
         person.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+
 class ObserverByEmail(APIView):
 
     def get(self, request, format=None):
@@ -92,24 +98,25 @@ class ObserverByEmail(APIView):
             serializer = ObserverVerboseSerializer(queryset)
             return Response(serializer.data)
         except Observer.DoesNotExist:
-            return Response({"error":"E-mail not found."}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"error": "E-mail not found."}, status=status.HTTP_404_NOT_FOUND)
 
 
 class ParticipantByEmail(APIView):
 
-   def get(self, request, format=None):
+    def get(self, request, format=None):
         try:
             queryset = Participant.objects.get(email=request.GET.get('email'))
             serializer = ParticipantSerializer(queryset)
             return Response(serializer.data)
         except Participant.DoesNotExist:
-            return Response({"error":"E-mail not found."}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"error": "E-mail not found."}, status=status.HTTP_404_NOT_FOUND)
 
 
 class ParticipantList(APIView):
     """
     List all persons, or create a new person
     """
+
     def get(self, request, format=None):
         persons = Participant.objects.all()
         serializer = ParticipantSerializer(persons, many=True)
@@ -122,10 +129,12 @@ class ParticipantList(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 class ParticipantDetail(APIView):
     """
     Retrieve, update or delete a snippet instance.
     """
+
     def get_object(self, pk):
         try:
             return Participant.objects.get(pk=pk)
@@ -149,4 +158,3 @@ class ParticipantDetail(APIView):
         person = self.get_object(pk)
         person.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-

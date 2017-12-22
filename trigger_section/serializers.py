@@ -1,15 +1,15 @@
-# from django.contrib.auth.models import User, Group
 from rest_framework import serializers
+
 from trigger_section.models import EventTrigger
 
-class EventTriggerSerializer(serializers.ModelSerializer):
 
+class EventTriggerSerializer(serializers.ModelSerializer):
     class Meta:
         model = EventTrigger
         # fields = ('id', 'sensor_type', 'sensor')
         fields = ('id', 'triggerType', 'triggerCondition',
-            'priority'
-        )
+                  'priority', 'timeOut'
+                  )
         extra_kwargs = {
             "id": {
                 "read_only": False,

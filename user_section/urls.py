@@ -1,7 +1,7 @@
 from django.conf.urls import url
-from user_section import views
 from rest_framework.urlpatterns import format_suffix_patterns
 
+from user_section import views
 
 urlpatterns = [
     url(r'^observers/$', views.ObserverList.as_view()),

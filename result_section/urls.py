@@ -1,7 +1,7 @@
 from django.conf.urls import url
-from result_section import views
 from rest_framework.urlpatterns import format_suffix_patterns
 
+from result_section import views
 
 urlpatterns = [
     url(r'^results-session/$', views.ResultSessionList.as_view()),

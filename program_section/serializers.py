@@ -1,14 +1,11 @@
 # from django.contrib.auth.models import User, Group
-from rest_framework import serializers
-from program_section.models import *
-from user_section.models import *
-from event_section.models import *
-from user_section.serializers import *
+
 from event_section.serializers import *
-from django.db import IntegrityError, transaction
+from program_section.models import *
+from user_section.serializers import *
+
 
 class ProgramSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Program
         fields = (
@@ -16,8 +13,8 @@ class ProgramSerializer(serializers.ModelSerializer):
             'participants', 'observers', 'events'
         )
 
-class ProgramVerboseSerializer(serializers.ModelSerializer):
 
+class ProgramVerboseSerializer(serializers.ModelSerializer):
     participants = ParticipantSerializer(many=True)
     observers = ObserverVerboseSerializer(many=True)
     events = EventVerboseSerializer(many=True)
@@ -42,7 +39,7 @@ class ProgramVerboseSerializer(serializers.ModelSerializer):
                     participants.append(
                         Participant.objects.create(
                             name=p['name'], email=p['email'])
-                        )
+                    )
 
                 observers = []
                 for o in observers_data:
@@ -50,7 +47,7 @@ class ProgramVerboseSerializer(serializers.ModelSerializer):
 
                     observers.append(Observer.objects.create(
                         role=o['role'], name=o['name'], email=o['email']
-                        ))
+                    ))
 
                     for c in cs:
                         if Participant.objects.filter(email=c['email']).exists():
@@ -58,7 +55,7 @@ class ProgramVerboseSerializer(serializers.ModelSerializer):
                         else:
                             p = Participant.objects.create(
                                 name=c['name'], email=c['email']
-                                )
+                            )
                         observers[-1].contacts.add(p)
                     observers[-1].save()
 
@@ -74,7 +71,7 @@ class ProgramVerboseSerializer(serializers.ModelSerializer):
 
                 program = Program.objects.create(
                     **validated_data
-                    )
+                )
 
                 for p in participants:
                     program.participants.add(p)
@@ -116,7 +113,7 @@ class ProgramVerboseSerializer(serializers.ModelSerializer):
                     else:
                         obj = Participant.objects.create(
                             name=p['name'], email=p['email']
-                            )
+                        )
                     participants.append(obj.id)
 
                 observers = []
@@ -133,7 +130,7 @@ class ProgramVerboseSerializer(serializers.ModelSerializer):
                     else:
                         observers.append(Observer.objects.create(
                             role=o['role'], name=o['name'], email=o['email']
-                            ))
+                        ))
 
                     for c in cs:
                         if Participant.objects.filter(email=c['email']).exists():
@@ -141,7 +138,7 @@ class ProgramVerboseSerializer(serializers.ModelSerializer):
                         else:
                             p = Participant.objects.create(
                                 name=c['name'], email=c['email']
-                                )
+                            )
                         observers[-1].contacts.add(p)
                     observers[-1].save()
 

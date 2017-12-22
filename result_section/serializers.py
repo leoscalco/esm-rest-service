@@ -1,22 +1,17 @@
 # from django.contrib.auth.models import User, Group
 from rest_framework import serializers
+
 from result_section.models import *
-from event_section.models import *
-from user_section.serializers import ParticipantSerializer
-from event_section.serializers import EventVerboseSerializer
-from intervention_section.serializers import MediaInterventionSerializer, TaskInterventionSerializer, QuestionInterventionSerializer, EmptyInterventionSerializer
-from sensor_section.serializers import SensorSerializer
-from intervention_section.models import *
-import json
+
 
 class ResultSessionSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = ResultSession
         fields = ('id', 'started', 'ended',
-            'participant', 'event',
-            'results'
-            )
+                  'participant', 'event',
+                  'results'
+                  )
+
 
 class ResultsVerboseSerializer(serializers.ModelSerializer):
     # media = MediaInterventionSerializer()
@@ -24,7 +19,7 @@ class ResultsVerboseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Result
-        fields = ('id', 'type' ,'started', 'ended')
+        fields = ('id', 'type', 'started', 'ended')
 
     def to_internal_value(self, obj):
         """
@@ -52,7 +47,6 @@ class ResultsVerboseSerializer(serializers.ModelSerializer):
             return EmptyResultVerboseSerializer(context=self.context).to_internal_value(obj)
         else:
             return super(ResultsSerializer, self).to_internal_value(obj)
-
 
     def to_representation(self, obj):
         """
@@ -102,7 +96,7 @@ class ResultsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Result
-        fields = ('id', 'type' ,'started', 'ended')
+        fields = ('id', 'type', 'started', 'ended')
 
     def to_representation(self, obj):
         """
@@ -126,16 +120,16 @@ class ResultsSerializer(serializers.ModelSerializer):
         else:
             return super(ResultsSerializer, self).to_representation(obj)
 
-class ResultSessionVerboseSerializer(serializers.ModelSerializer):
 
+class ResultSessionVerboseSerializer(serializers.ModelSerializer):
     results = ResultsVerboseSerializer(many=True)
 
     class Meta:
         model = ResultSession
         fields = ('id', 'started', 'ended',
-            'participant', 'event',
-            'results'
-            )
+                  'participant', 'event',
+                  'results'
+                  )
 
     def create(self, validated_data):
 
@@ -165,8 +159,8 @@ class ResultSessionVerboseSerializer(serializers.ModelSerializer):
             started=validated_data['started'],
             ended=validated_data['ended'],
             event=Event.objects.get(id=validated_data['event'].id),
-            participant= Participant.objects.get(id=validated_data['participant'].id)
-            )
+            participant=Participant.objects.get(id=validated_data['participant'].id)
+        )
 
         for r in results:
             result_session.results.add(r)
@@ -175,13 +169,12 @@ class ResultSessionVerboseSerializer(serializers.ModelSerializer):
         return result_session
 
 
-
 class MediaResultSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = MediaResult
-        fields = ('id', 'type' ,'started', 'ended',
-            'urlForDataFile', 'media')
+        fields = ('id', 'type', 'started', 'ended',
+                  'urlForDataFile', 'media')
+
 
 class MediaResultVerboseSerializer(serializers.ModelSerializer):
     # just id without, dict with
@@ -190,8 +183,8 @@ class MediaResultVerboseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = MediaResult
-        fields = ('id', 'type' ,'started', 'ended',
-            'urlForDataFile', 'media')
+        fields = ('id', 'type', 'started', 'ended',
+                  'urlForDataFile', 'media')
 
     def create(self, validated_data):
         # intervention = validated_data.pop('media')
@@ -203,9 +196,10 @@ class MediaResultVerboseSerializer(serializers.ModelSerializer):
             type=validated_data["type"],
             media=MediaIntervention.objects.get(id=validated_data['media'].id),
             urlForDataFile=validated_data["urlForDataFile"]
-            )
+        )
 
         return result
+
 
 class SensorResultSerializer(serializers.ModelSerializer):
     # just id without, dict with
@@ -214,8 +208,9 @@ class SensorResultSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SensorResult
-        fields = ('id', 'type' ,'started', 'ended',
-            'urlForDataFile', 'sensor')
+        fields = ('id', 'type', 'started', 'ended',
+                  'urlForDataFile', 'sensor')
+
 
 class SensorResultVerboseSerializer(serializers.ModelSerializer):
     # just id without, dict with
@@ -224,8 +219,8 @@ class SensorResultVerboseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SensorResult
-        fields = ('id', 'type' ,'started', 'ended',
-            'urlForDataFile', 'sensor')
+        fields = ('id', 'type', 'started', 'ended',
+                  'urlForDataFile', 'sensor')
 
     def create(self, validated_data):
         # intervention = validated_data.pop('sensor')
@@ -237,9 +232,10 @@ class SensorResultVerboseSerializer(serializers.ModelSerializer):
             type=validated_data["type"],
             sensor=Sensor.objects.get(id=validated_data['sensor'].id),
             urlForDataFile=validated_data["urlForDataFile"]
-            )
+        )
 
         return result
+
 
 class TaskResultSerializer(serializers.ModelSerializer):
     # just id without, dict with
@@ -248,8 +244,9 @@ class TaskResultSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TaskResult
-        fields = ('id', 'type' ,'started', 'ended',
-            'urlForDataFile', 'task')
+        fields = ('id', 'type', 'started', 'ended',
+                  'urlForDataFile', 'task')
+
 
 class TaskResultVerboseSerializer(serializers.ModelSerializer):
     # just id without, dict with
@@ -258,8 +255,8 @@ class TaskResultVerboseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TaskResult
-        fields = ('id', 'type' ,'started', 'ended',
-            'urlForDataFile', 'task')
+        fields = ('id', 'type', 'started', 'ended',
+                  'urlForDataFile', 'task')
 
     def create(self, validated_data):
         # intervention = validated_data.pop('task')
@@ -273,9 +270,10 @@ class TaskResultVerboseSerializer(serializers.ModelSerializer):
             type=validated_data["type"],
             task=TaskIntervention.objects.get(id=validated_data['task'].id),
             urlForDataFile=validated_data["urlForDataFile"]
-            )
+        )
 
         return result
+
 
 class EmptyResultSerializer(serializers.ModelSerializer):
     # just id without, dict with
@@ -284,7 +282,8 @@ class EmptyResultSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = EmptyResult
-        fields = ('id', 'type' ,'started', 'ended', 'empty')
+        fields = ('id', 'type', 'started', 'ended', 'empty')
+
 
 class EmptyResultVerboseSerializer(serializers.ModelSerializer):
     # just id without, dict with
@@ -293,8 +292,8 @@ class EmptyResultVerboseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = EmptyResult
-        fields = ('id', 'type' ,'started', 'ended',
-            'empty')
+        fields = ('id', 'type', 'started', 'ended',
+                  'empty')
 
     def create(self, validated_data):
         # intervention = validated_data.pop('task')
@@ -311,6 +310,7 @@ class EmptyResultVerboseSerializer(serializers.ModelSerializer):
 
         return result
 
+
 class QuestionResultSerializer(serializers.ModelSerializer):
     # just id without, dict with
     # participant = ParticipantSerializer(read_only=True)
@@ -318,8 +318,9 @@ class QuestionResultSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = QuestionResult
-        fields = ('id', 'type' ,'started', 'ended',
-            'answer', 'question')
+        fields = ('id', 'type', 'started', 'ended',
+                  'answer', 'question')
+
 
 class QuestionResultVerboseSerializer(serializers.ModelSerializer):
     # just id without, dict with
@@ -330,8 +331,8 @@ class QuestionResultVerboseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = QuestionResult
-        fields = ('id', 'type' ,'started', 'ended',
-            'answer', 'question')
+        fields = ('id', 'type', 'started', 'ended',
+                  'answer', 'question')
 
     def create(self, validated_data):
         # intervention = validated_data.pop('question')
@@ -342,9 +343,6 @@ class QuestionResultVerboseSerializer(serializers.ModelSerializer):
             type=validated_data["type"],
             question=QuestionIntervention.objects.get(id=validated_data['question'].id),
             answer=validated_data["answer"]
-            )
+        )
 
         return result
-
-
-

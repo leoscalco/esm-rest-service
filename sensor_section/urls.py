@@ -1,7 +1,7 @@
 from django.conf.urls import url
-from sensor_section import views
 from rest_framework.urlpatterns import format_suffix_patterns
 
+from sensor_section import views
 
 urlpatterns = [
     url(r'^sensors/$', views.SensorList.as_view()),

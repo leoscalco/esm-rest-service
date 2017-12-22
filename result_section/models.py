@@ -1,10 +1,13 @@
 from __future__ import unicode_literals
 
 from django.db import models
-from user_section.models import Participant
+
 from event_section.models import Event
 from intervention_section.models import MediaIntervention, QuestionIntervention, TaskIntervention, EmptyIntervention
 from sensor_section.models import Sensor
+from user_section.models import Participant
+
+
 # Create your models here.
 
 class Result(models.Model):
@@ -13,12 +16,14 @@ class Result(models.Model):
     type = models.CharField(max_length=10, default="question")
     # participant = models.ForeignKey(Participant)
 
+
 class ResultSession(models.Model):
     started = models.CharField(max_length=50, blank=True)
     ended = models.CharField(max_length=50, blank=True)
     participant = models.ForeignKey(Participant)
     event = models.ForeignKey(Event)
     results = models.ManyToManyField(Result)
+
 
 class MediaResult(Result):
     media = models.ForeignKey(MediaIntervention, null=True, blank=True)
@@ -29,6 +34,7 @@ class MediaResult(Result):
         kwargs['type'] = "media"
         super(MediaResult, self).__init__(*args, **kwargs)
 
+
 class QuestionResult(Result):
     question = models.ForeignKey(QuestionIntervention)
     # type = models.CharField(max_length=50, default="question")
@@ -37,6 +43,7 @@ class QuestionResult(Result):
     def __init__(self, *args, **kwargs):
         kwargs['type'] = "question"
         super(QuestionResult, self).__init__(*args, **kwargs)
+
 
 class SensorResult(Result):
     sensor = models.ForeignKey(Sensor)
@@ -47,6 +54,7 @@ class SensorResult(Result):
         kwargs['type'] = "sensor"
         super(SensorResult, self).__init__(*args, **kwargs)
 
+
 class TaskResult(Result):
     task = models.ForeignKey(TaskIntervention)
     # type = models.CharField(max_length=50, default="task")
@@ -56,8 +64,10 @@ class TaskResult(Result):
         kwargs['type'] = "task"
         super(TaskResult, self).__init__(*args, **kwargs)
 
+
 class EmptyResult(Result):
     empty = models.ForeignKey(EmptyIntervention)
+
     # type = models.CharField(max_length=50, default="task")
     # urlForDataFile = models.URLField()
 

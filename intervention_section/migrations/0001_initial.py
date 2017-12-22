@@ -3,12 +3,11 @@
 from __future__ import unicode_literals
 
 import annoying.fields
-from django.db import migrations, models
 import django.db.models.deletion
+from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -48,14 +47,18 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='EmptyIntervention',
             fields=[
-                ('intervention_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='intervention_section.Intervention')),
+                ('intervention_ptr',
+                 models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True,
+                                      primary_key=True, serialize=False, to='intervention_section.Intervention')),
             ],
             bases=('intervention_section.intervention',),
         ),
         migrations.CreateModel(
             name='MediaIntervention',
             fields=[
-                ('intervention_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='intervention_section.Intervention')),
+                ('intervention_ptr',
+                 models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True,
+                                      primary_key=True, serialize=False, to='intervention_section.Intervention')),
                 ('mediaType', models.CharField(default='image', max_length=10)),
             ],
             bases=('intervention_section.intervention',),
@@ -63,8 +66,12 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='QuestionIntervention',
             fields=[
-                ('intervention_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='intervention_section.Intervention')),
-                ('questionType', models.IntegerField(choices=[(0, 'open_text'), (1, 'radio'), (2, 'checkbox'), (3, 'likert'), (4, 'semantic_differential')], default=0)),
+                ('intervention_ptr',
+                 models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True,
+                                      primary_key=True, serialize=False, to='intervention_section.Intervention')),
+                ('questionType', models.IntegerField(
+                    choices=[(0, 'open_text'), (1, 'radio'), (2, 'checkbox'), (3, 'likert'),
+                             (4, 'semantic_differential')], default=0)),
                 ('conditions', annoying.fields.JSONField(blank=True, null=True)),
                 ('options', annoying.fields.JSONField(blank=True, null=True)),
                 ('complexConditions', models.ManyToManyField(blank=True, to='intervention_section.ComplexCondition')),
@@ -74,7 +81,9 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='TaskIntervention',
             fields=[
-                ('intervention_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='intervention_section.Intervention')),
+                ('intervention_ptr',
+                 models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True,
+                                      primary_key=True, serialize=False, to='intervention_section.Intervention')),
                 ('appPackage', models.CharField(max_length=50)),
             ],
             bases=('intervention_section.intervention',),

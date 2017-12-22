@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from django.http import Http404
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
 
-from rest_framework import viewsets
+from django.http import Http404
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
 from result_section.serializers import *
-from result_section.models import *
+
 
 class ResultSessionList(APIView):
 
@@ -46,10 +46,12 @@ class ResultsList(APIView):
 
         return Response(serializer.data)
 
+
 class MediaResultList(APIView):
     """
     List all taskresults, or create a new taskresult
     """
+
     def get(self, request, format=None):
         result = MediaResult.objects.all()
 
@@ -67,16 +69,17 @@ class MediaResultList(APIView):
         else:
             serializer = MediaResultSerializer(data=request.data)
 
-
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 class MediaResultDetail(APIView):
     """
     Retrieve, update or delete a mediaResult instance.
     """
+
     def get_object(self, pk):
         try:
             return MediaResult.objects.get(pk=pk)
@@ -112,10 +115,12 @@ class MediaResultDetail(APIView):
         MediaResult.delete(result)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+
 class TaskResultList(APIView):
     """
     List all taskresult, or create a new taskresult
     """
+
     def get(self, request, format=None):
         result = TaskResult.objects.all()
 
@@ -137,10 +142,12 @@ class TaskResultList(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 class TaskResultDetail(APIView):
     """
     Retrieve, update or delete a taskresult instance.
     """
+
     def get_object(self, pk):
         try:
             return TaskResult.objects.get(pk=pk)
@@ -173,10 +180,12 @@ class TaskResultDetail(APIView):
         TaskResult.delete(result)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+
 class EmptyResultList(APIView):
     """
     List all emptyresults, or create a new emptyresults
     """
+
     def get(self, request, format=None):
         result = EmptyResult.objects.all()
 
@@ -198,10 +207,12 @@ class EmptyResultList(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 class EmptyResultDetail(APIView):
     """
     Retrieve, update or delete a emptyresult instance.
     """
+
     def get_object(self, pk):
         try:
             return EmptyResult.objects.get(pk=pk)
@@ -239,6 +250,7 @@ class SensorResultList(APIView):
     """
     List all sensorresults, or create a new sensorresult
     """
+
     def get(self, request, format=None):
         result = SensorResult.objects.all()
         if (request.GET.get('verbose') == 'true'):
@@ -258,10 +270,12 @@ class SensorResultList(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 class SensorResultDetail(APIView):
     """
     Retrieve, update or delete a sensorresult instance.
     """
+
     def get_object(self, pk):
         try:
             return SensorResult.objects.get(pk=pk)
@@ -296,10 +310,12 @@ class SensorResultDetail(APIView):
         SensorResult.delete(result)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+
 class QuestionResultList(APIView):
     """
     List all sensorresults, or create a new sensorresult
     """
+
     def get(self, request, format=None):
         result = QuestionResult.objects.all()
 
@@ -321,10 +337,12 @@ class QuestionResultList(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 class QuestionResultDetail(APIView):
     """
     Retrieve, update or delete a sensorresult instance.
     """
+
     def get_object(self, pk):
         try:
             return QuestionResult.objects.get(pk=pk)

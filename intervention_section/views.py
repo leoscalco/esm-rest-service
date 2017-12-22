@@ -1,13 +1,16 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from django.http import Http404
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
 
-from rest_framework import viewsets
-from intervention_section.serializers import EmptyInterventionSerializer, TaskInterventionSerializer, MediaInterventionSerializer, QuestionInterventionSerializer, InterventionSerializer
-from intervention_section.models import EmptyIntervention, TaskIntervention, MediaIntervention, QuestionIntervention, Intervention
+from django.http import Http404
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+from intervention_section.models import EmptyIntervention, TaskIntervention, MediaIntervention, QuestionIntervention, \
+    Intervention
+from intervention_section.serializers import EmptyInterventionSerializer, TaskInterventionSerializer, \
+    MediaInterventionSerializer, QuestionInterventionSerializer, InterventionSerializer
+
 
 class InterventionList(APIView):
 
@@ -16,10 +19,12 @@ class InterventionList(APIView):
         serializer = InterventionSerializer(interventions, many=True)
         return Response(serializer.data)
 
+
 class EmptyInterventionList(APIView):
     """
     List all emptyInterventions, or create a new eventTrigger
     """
+
     def get(self, request, format=None):
         interventions = EmptyIntervention.objects.all()
         serializer = EmptyInterventionSerializer(interventions, many=True)
@@ -32,10 +37,12 @@ class EmptyInterventionList(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 class EmptyInterventionDetail(APIView):
     """
     Retrieve, update or delete a emptyIntervention instance.
     """
+
     def get_object(self, pk):
         try:
             return EmptyIntervention.objects.get(pk=pk)
@@ -60,10 +67,12 @@ class EmptyInterventionDetail(APIView):
         EmptyIntervention.delete(intervention)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+
 class TaskInterventionList(APIView):
     """
     List all taskInterventions, or create a new taskIntervention
     """
+
     def get(self, request, format=None):
         interventions = TaskIntervention.objects.all()
         serializer = TaskInterventionSerializer(interventions, many=True)
@@ -76,10 +85,12 @@ class TaskInterventionList(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 class TaskInterventionDetail(APIView):
     """
     Retrieve, update or delete a emptyIntervention instance.
     """
+
     def get_object(self, pk):
         try:
             return TaskIntervention.objects.get(pk=pk)
@@ -104,10 +115,12 @@ class TaskInterventionDetail(APIView):
         TaskIntervention.delete(intervention)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+
 class MediaInterventionList(APIView):
     """
     List all mediaInterventions, or create a new mediaIntervention
     """
+
     def get(self, request, format=None):
         interventions = MediaIntervention.objects.all()
         serializer = MediaInterventionSerializer(interventions, many=True)
@@ -120,10 +133,12 @@ class MediaInterventionList(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 class MediaInterventionDetail(APIView):
     """
     Retrieve, update or delete a mediaIntervention instance.
     """
+
     def get_object(self, pk):
         try:
             return MediaIntervention.objects.get(pk=pk)
@@ -148,10 +163,12 @@ class MediaInterventionDetail(APIView):
         MediaIntervention.delete(intervention)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+
 class QuestionInterventionList(APIView):
     """
     List all questionInterventions, or create a new mediaIntervention
     """
+
     def get(self, request, format=None):
         interventions = QuestionIntervention.objects.all()
         serializer = QuestionInterventionSerializer(interventions, many=True)
@@ -165,10 +182,12 @@ class QuestionInterventionList(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 class QuestionInterventionDetail(APIView):
     """
     Retrieve, update or delete a mediaIntervention instance.
     """
+
     def get_object(self, pk):
         try:
             return QuestionIntervention.objects.get(pk=pk)

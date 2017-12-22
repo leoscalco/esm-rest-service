@@ -1,7 +1,7 @@
 from django.conf.urls import url
-from program_section import views
 from rest_framework.urlpatterns import format_suffix_patterns
 
+from program_section import views
 
 urlpatterns = [
     url(r'^programs/$', views.ProgramList.as_view()),

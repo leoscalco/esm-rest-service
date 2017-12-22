@@ -1,18 +1,22 @@
 from django.contrib.auth.models import User, Group
-from rest_framework import serializers
-from models import Observer, Participant, Person
-from django.db import IntegrityError, transaction
 from django.contrib.auth.validators import UnicodeUsernameValidator
+from django.db import IntegrityError, transaction
+from rest_framework import serializers
+
+from models import Observer, Participant, Person
+
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
         fields = ('url', 'username', 'email', 'groups')
 
+
 class GroupSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Group
         fields = ('url', 'name')
+
 
 # class PersonSerializer(serializers.ModelSerializer):
 #     class Meta:
@@ -47,13 +51,13 @@ class ObserverContactsSerializer(serializers.ModelSerializer):
                 "read_only": False,
                 "required": False,
             },
-            "email":{
+            "email": {
                 'validators': [UnicodeUsernameValidator()],
             }
         }
 
-class ObserverSerializer(serializers.ModelSerializer):
 
+class ObserverSerializer(serializers.ModelSerializer):
     class Meta:
         model = Observer
         fields = ('id', 'name', 'email', 'role', 'contacts')
@@ -62,10 +66,11 @@ class ObserverSerializer(serializers.ModelSerializer):
                 "read_only": False,
                 "required": False,
             },
-            "email":{
+            "email": {
                 'validators': [UnicodeUsernameValidator()],
             }
         }
+
     def create(self, validated_data):
         try:
             with transaction.atomic():
@@ -80,7 +85,7 @@ class ObserverSerializer(serializers.ModelSerializer):
                 for contact in contacts_data:
                     # contact['email'] = "forc@email.com"
                     participants.append(Participant.objects.create(name=contact['name'],
-                        email=contact['email']))
+                                                                   email=contact['email']))
 
                 # validated_data['contacts'] = participants
 
@@ -89,7 +94,7 @@ class ObserverSerializer(serializers.ModelSerializer):
                     name=validated_data['name'],
                     email=validated_data['email'],
                     role=validated_data['role']
-                    )
+                )
 
                 for p in participants:
                     observer.contacts.add(p)
@@ -99,6 +104,7 @@ class ObserverSerializer(serializers.ModelSerializer):
                 return observer
         except IntegrityError:
             return "error"
+
 
 class ObserverVerboseSerializer(serializers.ModelSerializer):
     contacts = ObserverContactsSerializer(many=True)
@@ -111,7 +117,7 @@ class ObserverVerboseSerializer(serializers.ModelSerializer):
                 "read_only": False,
                 "required": False,
             },
-            "email":{
+            "email": {
                 'validators': [UnicodeUsernameValidator()],
             }
         }
@@ -131,7 +137,7 @@ class ObserverVerboseSerializer(serializers.ModelSerializer):
                 for contact in contacts_data:
                     # contact['email'] = "forc@email.com"
                     participants.append(Participant.objects.create(name=contact['name'],
-                        email=contact['email']))
+                                                                   email=contact['email']))
 
                 # validated_data['contacts'] = participants
 
@@ -139,7 +145,7 @@ class ObserverVerboseSerializer(serializers.ModelSerializer):
                     name=validated_data['name'],
                     email=validated_data['email'],
                     role=validated_data['role']
-                    )
+                )
 
                 for p in participants:
                     observer.contacts.add(p)
@@ -182,6 +188,7 @@ class ObserverVerboseSerializer(serializers.ModelSerializer):
         except IntegrityError:
             return "Error"
 
+
 class ParticipantSerializer(serializers.ModelSerializer):
     # contacts = ContactsSerializer(many=False)
 
@@ -189,13 +196,13 @@ class ParticipantSerializer(serializers.ModelSerializer):
         model = Participant
         fields = ('id', 'name', 'email',
             # 'observerResponsible'
-            )
+                  )
         extra_kwargs = {
             "id": {
                 "read_only": False,
                 "required": False,
             },
-            "email":{
+            "email": {
                 'validators': [UnicodeUsernameValidator()],
             }
         }
@@ -209,7 +216,6 @@ class ParticipantSerializer(serializers.ModelSerializer):
         p = Participant.objects.create(**validated_data)
 
         return p
-
 
     # id = serializers.IntegerField(read_only=True)
     # name = serializers.CharField(max_length=200)

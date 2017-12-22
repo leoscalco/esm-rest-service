@@ -1,15 +1,16 @@
 # from django.contrib.auth.models import User, Group
 from rest_framework import serializers
+
 from sensor_section.models import Sensor
 
-class SensorSerializer(serializers.ModelSerializer):
 
+class SensorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Sensor
         # fields = ('id', 'sensor_type', 'sensor')
         fields = ('id', 'sensorType', 'sensor', 'SENSOR_TYPE_INTERVAL',
-            'SENSOR_TYPE_TASK'
-            )
+                  'SENSOR_TYPE_TASK'
+                  )
         extra_kwargs = {
             "id": {
                 "read_only": False,

@@ -1,7 +1,7 @@
 from django.conf.urls import url
-from event_section import views
 from rest_framework.urlpatterns import format_suffix_patterns
 
+from event_section import views
 
 urlpatterns = [
     url(r'^events/$', views.EventList.as_view()),
