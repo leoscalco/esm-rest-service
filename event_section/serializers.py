@@ -1,29 +1,24 @@
-# from django.contrib.auth.models import User, Group
-from rest_framework import serializers
-from event_section.models import ActiveEvent, Event
-
-from trigger_section.models import EventTrigger as Trigger
-from intervention_section.models import *
-from sensor_section.models import Sensor
 from django.db import IntegrityError, transaction
-# from result_section.models import *
 
-
-from result_section.serializers import *
-from trigger_section.serializers import EventTriggerSerializer;
-from sensor_section.serializers import SensorSerializer
+from event_section.models import ActiveEvent
 from intervention_section.serializers import *
+from result_section.serializers import *
+from sensor_section.serializers import SensorSerializer
+from trigger_section.models import EventTrigger as Trigger
+from trigger_section.serializers import EventTriggerSerializer;
+
+
+# from result_section.models import *
 
 # PASSANDO SOMENTE O ID
 
 class EventSerializer(serializers.ModelSerializer):
-
     sensors = SensorSerializer(many=True)
 
     class Meta:
         model = Event
-        fields = ('id', 'type', 'title', 'description','sensors'
-        )
+        fields = ('id', 'type', 'title', 'description', 'sensors'
+                  )
 
     def to_representation(self, obj):
         """
@@ -35,8 +30,8 @@ class EventSerializer(serializers.ModelSerializer):
         else:
             return super(EventSerializer, self).to_representation(obj)
 
-class EventVerboseSerializer(serializers.ModelSerializer):
 
+class EventVerboseSerializer(serializers.ModelSerializer):
     # results = ResultsSerializer(many=True)
     triggers = EventTriggerSerializer(many=True)
     sensors = SensorSerializer(many=True)
@@ -46,8 +41,8 @@ class EventVerboseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
         fields = ('id', 'type', 'title', 'description',
-        'triggers', 'sensors', 'interventions'
-        )
+                  'triggers', 'sensors', 'interventions'
+                  )
 
         extra_kwargs = {
             "id": {
@@ -81,8 +76,9 @@ class ActiveEventSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ActiveEvent
-        fields = ('id', 'type', 'title' , 'description',
-           'triggers', 'sensors', 'interventions' )
+        fields = ('id', 'type', 'title', 'description',
+                  'triggers', 'sensors', 'interventions')
+
 
 class ActiveEventVerboseSerializer(serializers.ModelSerializer):
     # just id without, dict with
@@ -95,9 +91,9 @@ class ActiveEventVerboseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ActiveEvent
-        fields = ('id', 'type', 'title' , 'description',
-           'triggers', 'sensors',
-           'interventions')
+        fields = ('id', 'type', 'title', 'description',
+                  'triggers', 'sensors',
+                  'interventions')
 
         extra_kwargs = {
             "id": {
@@ -133,9 +129,9 @@ class ActiveEventVerboseSerializer(serializers.ModelSerializer):
                         t = obj
                     else:
                         t = Trigger.objects.create(
-                            #triggerType=trigger['triggerType'],
-                            #triggerCondition=trigger['triggerCondition'],
-                            #priority=trigger['priority']
+                            # triggerType=trigger['triggerType'],
+                            # triggerCondition=trigger['triggerCondition'],
+                            # priority=trigger['priority']
                             **trigger
                         )
 
@@ -203,7 +199,6 @@ class ActiveEventVerboseSerializer(serializers.ModelSerializer):
                     else:
                         # i.medias = arr
                         if i['type'] == "empty":
-
                             # interventions.append(EmptyIntervention.objects.create(**i))
                             emp = EmptyInterventionSerializer()
                             interventions.append(emp.create(i).id)
@@ -250,7 +245,7 @@ class ActiveEventVerboseSerializer(serializers.ModelSerializer):
                 for t in triggers_data:
                     ts = EventTriggerSerializer()
                     ts.create(t)
-                    triggers.append(EventTrigger.objects.all().latest('id'))
+                    triggers.append(Trigger.objects.all().latest('id'))
 
                     # triggers.append(Trigger.objects.create(**t))
 
@@ -319,7 +314,7 @@ class ActiveEventVerboseSerializer(serializers.ModelSerializer):
 
                 activeevent = ActiveEvent.objects.create(
                     **validated_data
-                    )
+                )
 
                 for i in interventions:
                     activeevent.interventions.add(i)
